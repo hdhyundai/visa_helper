@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HD현대삼호 외국인 비자지원 (Master)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f1f5f9; }
+        
+        /* 스텝 컨테이너 애니메이션 */
+        .step-container { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .step-container.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 모달 애니메이션 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 100; backdrop-filter: blur(4px); }
+        .modal.active { display: flex; justify-content: center; align-items: center; animation: fadeIn 0.2s; }
+        
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* --- 프리미엄 UI 디자인 토큰 (CSS 클래스) --- */
+        .input-field {
+            width: 100%; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 0.875rem 1rem; font-size: 0.875rem;
+            color: #1e293b; background-color: #f8fafc; transition: all 0.2s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .input-field:focus { outline: none; border-color: #3b82f6; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+        .input-field::placeholder { color: #94a3b8; }
+        
+        .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.375rem; letter-spacing: -0.02em; }
+        
+        .card-box { background-color: #ffffff; padding: 1.5rem; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+        .card-header { font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid #f1f5f9; }
+        
+        .radio-btn-group label { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.875rem; border: 1px solid #cbd5e1; background: #ffffff; cursor: pointer; transition: all 0.2s; font-size: 0.875rem; font-weight: 700; color: #475569; }
+        .radio-btn-group label:first-child { border-top-left-radius: 0.75rem; border-bottom-left-radius: 0.75rem; }
+        .radio-btn-group label:last-child { border-top-right-radius: 0.75rem; border-bottom-right-radius: 0.75rem; border-left: none; }
+        .radio-btn-group input:checked + span { color: #2563eb; }
+        .radio-btn-group label:has(input:checked) { background-color: #eff6ff; border-color: #3b82f6; z-index: 1; box-shadow: 0 0 0 1px #3b82f6; }
+        
+        .dynamic-wrap { transition: all 0.3s ease; overflow: hidden; }
+        input[type="text"].uppercase { text-transform: uppercase; }
+        
+        /* 라디오/체크박스 커스텀 */
+        .custom-radio { width: 1.25rem; height: 1.25rem; accent-color: #2563eb; cursor: pointer; }
+    </style>
+</head>
+<body class="text-slate-800 md:p-6 lg:p-10">
+
+    <div id="app-ui" class="max-w-3xl mx-auto bg-white min-h-screen md:min-h-[85vh] shadow-2xl relative flex flex-col md:rounded-3xl overflow-hidden ring-1 ring-slate-900/5">
+        
+        <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 sticky top-0 z-10 flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <button onclick="goHome()" class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold transition flex items-center backdrop-blur-sm">
+                    <i class="fa-solid fa-house md:mr-2"></i> <span class="hidden md:inline">홈으로</span>
+                </button>
+                <button onclick="clearFormData()" class="px-3 py-2 bg-rose-500/80 hover:bg-rose-500 rounded-xl text-sm font-bold transition flex items-center shadow-sm backdrop-blur-sm">
+                    <i class="fa-solid fa-rotate-right md:mr-2"></i> <span class="hidden md:inline">초기화</span>
+                </button>
+            </div>
+            <h1 class="text-base font-extrabold tracking-tight hidden sm:block text-slate-200">HD현대삼호 <span class="text-white">비자 서류 마스터</span></h1>
+            <button onclick="openAdminModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl shadow-md text-sm font-bold transition border border-blue-400/30 flex items-center">
+                <i class="fa-solid fa-sliders md:mr-2"></i> <span class="hidden md:inline">양식 설정</span>
+            </button>
+        </header>
+
+        <div id="progress-container" class="hidden w-full bg-slate-100 h-1.5 shadow-inner">
+            <div id="progress-bar" class="bg-blue-600 h-1.5 transition-all duration-500 ease-out" style="width: 0%;"></div>
+        </div>
+
+        <main class="p-6 md:p-10 flex-1 overflow-y-auto overflow-x-hidden relative">
+            
+            <div id="step-0" class="step-container active">
+                <div class="flex flex-col items-center justify-center h-full min-h-[60vh] text-center pt-8 md:pt-16">
+                    <div class="w-28 h-28 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl shadow-blue-500/30 transform rotate-3 hover:rotate-6 transition duration-300">
+                        <i class="fa-solid fa-file-signature text-6xl text-white -rotate-3"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-800 tracking-tight">비자 서류 자동화 시스템</h2>
+                    <p class="text-base text-slate-500 mb-12 px-4 leading-relaxed max-w-lg mx-auto">
+                        한 번의 인적사항 입력으로 <strong class="text-slate-800">통합신청서, 숙소제공확인서, 신원보증서</strong>를<br class="hidden md:block">
+                        PC와 모바일 어디서든 완벽하게 동시 생성합니다.
+                    </p>
+                    
+                    <button onclick="nextStep(1)" class="w-full max-w-sm bg-slate-900 hover:bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 hover:shadow-blue-500/25 flex justify-center items-center text-lg">
+                        <i class="fa-solid fa-bolt text-yellow-400 mr-3"></i> 서류 작성 시작하기
+                    </button>
+                    
+                    <div class="mt-10 flex items-center justify-center gap-2 text-xs text-slate-400 font-medium bg-slate-50 py-2 px-4 rounded-full">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> 입력된 데이터는 브라우저에 안전하게 실시간 임시저장됩니다.
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-1" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 1</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1">비자 및 민원 선택</h2>
+                    <p class="text-sm text-slate-500 mt-2">선택하신 내용에 따라 필요한 입력 항목과 증빙 서류가 동적으로 변경됩니다.</p>
+                </div>
+                
+                <div class="card-box">
+                    <label class="form-label text-base mb-3"><i class="fa-solid fa-passport text-blue-500 mr-1"></i> 보유 비자 자격</label>
+                    <div class="radio-btn-group flex mb-2">
+                        <label>
+                            <input type="radio" name="visaType" value="E-9" class="hidden" checked onchange="handleModeChange(); saveFormData();"> 
+                            <span>E-9 (비전문취업)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="visaType" value="E-7" class="hidden" onchange="handleModeChange(); saveFormData();"> 
+                            <span>E-7 (특정활동)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-box">
+                    <label class="form-label text-base mb-3"><i class="fa-solid fa-list-check text-indigo-500 mr-1"></i> 민원 종류 (신청/신고)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 auto-rows-fr">
+                        <label class="flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 h-full">
+                            <input type="radio" name="reqType" value="chk_alien_reg" class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-slate-700">외국인 등록</span>
+                        </label>
+                        <label class="flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-blue-400 bg-blue-50 ring-1 ring-blue-400 h-full" id="lbl_extension">
+                            <input type="radio" name="reqType" value="chk_extension" checked class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-blue-800">체류기간 연장허가</span>
+                        </label>
+                        <label class="flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 h-full">
+                            <input type="radio" name="reqType" value="chk_change_work" class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-slate-700">근무처 변경/추가</span>
+                        </label>
+                        <label class="flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 h-full">
+                            <input type="radio" name="reqType" value="chk_reentry" class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-slate-700">재입국허가</span>
+                        </label>
+                        <label class="flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 h-full">
+                            <input type="radio" name="reqType" value="chk_reissue" class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-slate-700">등록증 재발급</span>
+                        </label>
+                        <label class="flex items-center px-4 py-2 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 h-full">
+                            <input type="radio" name="reqType" value="chk_change_status" class="custom-radio mr-3" onchange="handleModeChange(); saveFormData();"> 
+                            <span class="font-bold text-slate-700 whitespace-nowrap mr-3">체류자격 변경</span>
+                            <input type="text" id="val_change_status" class="input-field !py-2 !px-3 text-xs uppercase flex-1 min-w-0" placeholder="예: E-7-4" onclick="document.querySelector('input[value=\'chk_change_status\']').click();">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <button onclick="nextStep(2)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">다음 단계 진행하기</button>
+                </div>
+            </div>
+
+            <div id="step-2" class="step-container">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 2</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mt-1">외국인 인적사항</h2>
+                    </div>
+                    <button onclick="prevStep(1)" class="text-slate-400 hover:text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i>이전</button>
+                </div>
+
+                <div class="card-box border-t-4 border-blue-500">
+                    <div class="card-header text-blue-800"><i class="fa-regular fa-id-card mr-2"></i>기본 인적 정보</div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div><label class="form-label">성 (Surname)</label><input type="text" id="i_surname" class="input-field uppercase" placeholder="예: BUI"></div>
+                        <div><label class="form-label">명 (Given Name)</label><input type="text" id="i_givenname" class="input-field uppercase" placeholder="예: QUOC TINH"></div>
+                        
+                        <div><label class="form-label">생년월일 (YYYY-MM-DD)</label><input type="text" id="i_dob" class="input-field date-format" inputmode="numeric" placeholder="예: 1990-01-01" maxlength="10"></div>
+                        <div><label class="form-label">성별</label>
+                            <select id="i_gender" class="input-field cursor-pointer"><option value="M">남성 (Male)</option><option value="F">여성 (Female)</option></select>
+                        </div>
+                        
+                        <div><label class="form-label">국적 (Nationality)</label><input type="text" id="i_nation" class="input-field uppercase" placeholder="예: VIETNAM"></div>
+                        <div><label class="form-label">외국인등록번호</label><input type="text" id="i_arc" class="input-field" inputmode="numeric" placeholder="000000-0000000"></div>
+                        
+                        <div><label class="form-label">여권번호 (Passport No.)</label><input type="text" id="i_passport" class="input-field uppercase" placeholder="영문/숫자 조합"></div>
+                        <div><label class="form-label">여권 발급일 / 만료일</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="i_pass_issue" class="input-field px-2 text-xs date-format" inputmode="numeric" placeholder="발급(YYYY-MM-DD)" maxlength="10" title="발급일">
+                                <input type="text" id="i_pass_exp" class="input-field px-2 text-xs date-format" inputmode="numeric" placeholder="만료(YYYY-MM-DD)" maxlength="10" title="만료일">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-box bg-slate-50 border-slate-200">
+                    <div class="card-header text-slate-700 border-slate-200"><i class="fa-solid fa-file-pen mr-2"></i>통합신청서 제출자 (서명 권한자)</div>
+                    
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <label class="flex items-center cursor-pointer"><input type="radio" name="submitter" value="self" checked onchange="handleModeChange(); saveFormData();" class="custom-radio mr-2"> <span class="text-sm font-bold">본인 직접 제출</span></label>
+                        <label class="flex items-center cursor-pointer"><input type="radio" name="submitter" value="spouse" onchange="handleModeChange(); saveFormData();" class="custom-radio mr-2"> <span class="text-sm font-bold text-slate-600">배우자 (대리)</span></label>
+                        <label class="flex items-center cursor-pointer"><input type="radio" name="submitter" value="parents" onchange="handleModeChange(); saveFormData();" class="custom-radio mr-2"> <span class="text-sm font-bold text-slate-600">부/모 (대리)</span></label>
+                    </div>
+                    
+                    <div id="wrap_family_proxy" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden dynamic-wrap pt-2 border-t border-slate-200 mt-2">
+                        <div id="wrap_spouse" class="hidden w-full sm:col-span-2"><label class="form-label text-blue-700">대리 제출하는 배우자 성명 (영문)</label><input type="text" id="i_spouse" class="input-field uppercase" placeholder="가족의 여권상 영문 이름"></div>
+                        <div id="wrap_parents" class="hidden w-full sm:col-span-2"><label class="form-label text-blue-700">대리 제출하는 부 또는 모 성명 (영문)</label><input type="text" id="i_parents" class="input-field uppercase" placeholder="가족의 여권상 영문 이름"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button onclick="prevStep(1)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-3.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep(3)" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">다음 단계</button>
+                </div>
+            </div>
+
+            <div id="step-3" class="step-container">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 3</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mt-1">주소 및 연락처</h2>
+                    </div>
+                    <button onclick="prevStep(2)" class="text-slate-400 hover:text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i>이전</button>
+                </div>
+
+                <div class="card-box border-t-4 border-indigo-500">
+                    <div class="card-header text-indigo-800"><i class="fa-solid fa-map-location-dot mr-2"></i>대한민국 체류지 정보</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2"><label class="form-label">현재 대한민국 내 주소 (거주지)</label><input type="text" id="i_address_kr" class="input-field" placeholder="도로명 주소 및 상세 호수"></div>
+                        <div><label class="form-label">휴대전화번호 (Cell Phone)</label><input type="tel" id="i_cellphone" class="input-field" placeholder="010-0000-0000"></div>
+                        <div><label class="form-label">일반 전화번호 (선택)</label><input type="tel" id="i_phone" class="input-field" placeholder="02-000-0000"></div>
+                    </div>
+                </div>
+
+                <div class="card-box border-t-4 border-slate-300 bg-slate-50">
+                    <div class="card-header text-slate-600"><i class="fa-solid fa-plane-departure mr-2"></i>본국 (Home Country) 정보</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2"><label class="form-label">본국 주소 (Home Country Address)</label><input type="text" id="i_address_home" class="input-field uppercase" placeholder="해외 현지 영문 주소"></div>
+                        <div><label class="form-label">본국 전화번호</label><input type="tel" id="i_home_phone" class="input-field" placeholder="+84 00-000-0000"></div>
+                        <div><label class="form-label">전자우편 (E-mail)</label><input type="email" id="i_email" class="input-field uppercase" placeholder="example@email.com"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button onclick="prevStep(2)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-3.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep(4)" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">다음 단계</button>
+                </div>
+            </div>
+
+            <div id="step-4" class="step-container">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 4</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mt-1">회사 및 서약 정보</h2>
+                    </div>
+                    <button onclick="prevStep(3)" class="text-slate-400 hover:text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i>이전</button>
+                </div>
+
+                <div class="card-box border-t-4 border-blue-600">
+                    <div class="card-header text-blue-900"><i class="fa-solid fa-building mr-2"></i>원 근무처 (고용주/보증인) 정보</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2 lg:col-span-2"><label class="form-label">근무처 명칭</label><input type="text" id="i_cname" class="input-field" value="에이치디현대삼호 주식회사"></div>
+                        <div><label class="form-label">사업자등록번호</label><input type="text" id="i_cregno" class="input-field font-mono" value="411-81-19799"></div>
+                        
+                        <div><label class="form-label">대표자 성명</label><input type="text" id="i_rep_name" class="input-field" value="신현대"></div>
+                        <div><label class="form-label">대표자 주민등록번호</label><input type="text" id="i_rep_id" class="input-field font-mono" placeholder="13자리 하이픈 자동"></div>
+                        <div><label class="form-label">대표자 성별</label>
+                            <select id="i_rep_gender" class="input-field cursor-pointer"><option value="M">남성</option><option value="F">여성</option></select>
+                        </div>
+                        
+                        <div class="sm:col-span-2"><label class="form-label">회사 주소</label><input type="text" id="i_caddr" class="input-field" value="전라남도 영암군 삼호읍 대불로 93"></div>
+                        <div><label class="form-label">회사 전화번호</label><input type="tel" id="i_cphone" class="input-field font-mono" value="061-460-2114"></div>
+                    </div>
+                </div>
+
+                <div id="wrap_new_workplace" class="dynamic-wrap card-box border-t-4 border-amber-500 bg-amber-50/30 hidden">
+                    <div class="card-header text-amber-800"><i class="fa-solid fa-building-circle-arrow-right mr-2"></i>예정 근무처 정보 (변경/추가 시)</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2"><label class="form-label">예정 근무처 명칭</label><input type="text" id="i_new_cname" class="input-field bg-white"></div>
+                        <div><label class="form-label">사업자등록번호</label><input type="text" id="i_new_cregno" class="input-field bg-white font-mono"></div>
+                        <div class="sm:col-span-2 md:col-span-3"><label class="form-label">예정 근무처 전화번호</label><input type="tel" id="i_new_cphone" class="input-field bg-white font-mono max-w-xs"></div>
+                    </div>
+                </div>
+                
+                <div id="wrap_dorm" class="dynamic-wrap card-box border-t-4 border-emerald-500 bg-emerald-50/30 hidden">
+                    <div class="card-header text-emerald-800"><i class="fa-solid fa-house-chimney-user mr-2"></i>거주/숙소 제공 정보</div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="form-label mb-2">숙소 소유 형태</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_own" value="own_self" checked onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 자가</label>
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_own" value="own_rent" onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 임대</label>
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_own" value="own_other" onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 기타</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label mb-2">숙소 주거 형태</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_type" value="type_dorm" checked onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 기숙사</label>
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_type" value="type_private" onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 개인주택</label>
+                                <label class="flex items-center cursor-pointer text-sm"><input type="radio" name="r_type" value="type_hotel" onchange="saveFormData()" class="custom-radio mr-2 text-emerald-600"> 숙박시설</label>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="form-label">제공 시작일 (입주일)</label>
+                            <input type="text" id="i_dorm_start" class="input-field bg-white max-w-[200px] date-format" inputmode="numeric" placeholder="예: 2024-05-18" maxlength="10">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-box border-t-4 border-slate-300">
+                    <div class="card-header text-slate-700"><i class="fa-solid fa-clipboard-list mr-2"></i>기타 신고 정보</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="form-label">외국인 직업</label><input type="text" id="i_job" class="input-field" value="조선업"></div>
+                        <div><label class="form-label">연소득 (단위: 만원)</label>
+                            <div class="relative">
+                                <input type="number" id="i_income" class="input-field pr-12 text-right font-mono" placeholder="예: 3000">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-500 font-bold">만원</span>
+                            </div>
+                        </div>
+                        
+                        <div id="wrap_reentry_period" class="dynamic-wrap hidden sm:col-span-2">
+                            <label class="form-label text-purple-700"><i class="fa-solid fa-plane mr-1"></i> 재입국 신청 기간</label>
+                            <input type="text" id="i_reentry_period" class="input-field border-purple-200 focus:border-purple-500 focus:ring-purple-500 bg-purple-50/30" placeholder="예: 1년">
+                        </div>
+                        
+                        <div id="wrap_refund_acc" class="dynamic-wrap hidden sm:col-span-2 mt-2">
+                            <label class="form-label text-teal-700"><i class="fa-solid fa-won-sign mr-1"></i> 수수료 환급 계좌 (등록/재발급 시)</label>
+                            <div class="flex shadow-sm rounded-xl overflow-hidden border border-teal-200 focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-teal-500">
+                                <input type="text" id="i_refund_bank" class="w-1/3 px-4 py-3 text-sm bg-teal-50 border-r border-teal-200 font-bold text-teal-800 outline-none" placeholder="은행명 (예: 우리은행)">
+                                <input type="text" id="i_refund_acc" class="w-2/3 px-4 py-3 text-sm outline-none font-mono" placeholder="계좌번호 (하이픈 없이 입력)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex gap-3">
+                    <button onclick="prevStep(3)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-3.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep(5)" class="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-yellow-400 mr-2"></i> AI 검증 단계로
+                    </button>
+                </div>
+            </div>
+
+            <div id="step-5" class="step-container">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-indigo-500 font-bold text-sm tracking-wider uppercase">Step 5</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mt-1">AI 서류 검증소</h2>
+                    </div>
+                    <button onclick="prevStep(4)" class="text-slate-400 hover:text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i>이전</button>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl mb-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 opacity-10 transform translate-x-4 -translate-y-4">
+                        <i class="fa-solid fa-microchip text-9xl"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xl font-bold flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-400"></i> Gemini AI 정밀 대조</h3>
+                            <span class="bg-indigo-500/50 text-indigo-100 text-xs px-2.5 py-1 rounded-full border border-indigo-400/30 backdrop-blur-md">VLM 판독 엔진</span>
+                        </div>
+                        <p class="text-sm text-indigo-200 mb-6 leading-relaxed">
+                            입력하신 신청 정보와 증빙서류(여권, 등록증, 사업자등록증, 계약서 등)를 상호 대조하여 <strong class="text-white">글자 오타, 모순, 흐릿한 글씨</strong>까지 완벽하게 잡아냅니다.
+                        </p>
+                        
+                        <label class="block w-full bg-white/10 hover:bg-white/20 border-2 border-indigo-400/50 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all group backdrop-blur-sm">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl mb-3 text-indigo-300 group-hover:text-white transition-colors duration-300 transform group-hover:-translate-y-1"></i>
+                            <span class="block text-base font-bold text-white mb-1">증빙 파일 업로드 (터치/클릭)</span>
+                            <span class="block text-xs text-indigo-300">지원 형식: 이미지 (JPG, PNG) 및 PDF</span>
+                            <input type="file" id="doc-uploads" multiple accept="image/*, application/pdf" class="hidden" onchange="previewFiles()">
+                        </label>
+                        
+                        <div id="file-preview-container" class="flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide"></div>
+                    </div>
+                </div>
+
+                <div id="ai-result-box" class="hidden rounded-2xl p-5 mb-6 text-sm transition-all shadow-md"></div>
+
+                <div class="flex flex-col gap-3">
+                    <button id="btn-run-ai" onclick="runAIVerification()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex justify-center items-center text-lg">
+                        <i class="fa-solid fa-magnifying-glass-chart mr-2"></i> 서류 교차 검증 시작
+                    </button>
+                    <div class="flex gap-3 mt-2">
+                        <button onclick="prevStep(4)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-3.5 rounded-xl transition">수정하기</button>
+                        <button onclick="prepareGenerate()" class="w-2/3 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl shadow transition flex justify-center items-center">
+                            건너뛰고 서류 생성 <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-6" class="step-container">
+                <div class="flex flex-col items-center justify-center text-center pt-8 md:pt-12">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6 shadow-inner text-emerald-500">
+                        <i class="fa-solid fa-print text-4xl"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold mb-3 text-slate-800 tracking-tight">스마트 서류 발급소</h2>
+                    <p class="text-sm text-slate-500 mb-8 px-4">입력하신 민원 종류에 따라 아래 필수 서류들이 자동 체크되었습니다.</p>
+                    
+                    <div class="w-full max-w-md card-box text-left !p-6">
+                        <h3 class="font-bold text-sm mb-4 text-slate-800 flex items-center"><i class="fa-solid fa-copy text-blue-500 mr-2"></i>발급할 양식 확인 (중복 가능)</h3>
+                        <div class="space-y-4 text-sm">
+                            <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-blue-50 has-[:checked]:border-blue-300">
+                                <input type="checkbox" id="gen_main" class="w-5 h-5 custom-radio mr-3" onchange="saveFormData()"> 
+                                <span class="font-bold text-slate-800">통합신청서 (별지 제34호)</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-300">
+                                <input type="checkbox" id="gen_residence" class="w-5 h-5 custom-radio mr-3 !accent-emerald-600" onchange="saveFormData()"> 
+                                <span class="font-bold text-slate-800">거주/숙소제공 확인서</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300">
+                                <input type="checkbox" id="gen_guarantee" class="w-5 h-5 custom-radio mr-3 !accent-indigo-600" onchange="saveFormData()"> 
+                                <span class="font-bold text-slate-800">신원보증서 (별지 제129호)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="btn-generate-all" onclick="generateSelectedPDFs()" class="w-full max-w-md bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-xl transition transform hover:-translate-y-1 hover:shadow-blue-500/30 text-lg flex justify-center items-center mb-8">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> 선택된 서류 일괄 생성
+                    </button>
+                    
+                    <div id="download-zone" class="hidden w-full max-w-md flex flex-col gap-3">
+                        <div class="w-full h-px bg-slate-200 my-2"></div>
+                        <div class="inline-flex items-center justify-center bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold text-sm mb-2 mx-auto"><i class="fa-solid fa-check mr-2"></i>생성 완료! 버튼을 눌러 저장하세요</div>
+                        </div>
+
+                    <button onclick="prevStep(5)" class="mt-8 text-slate-400 text-sm underline hover:text-slate-600 font-medium bg-transparent border-none">이전 단계(AI 검증)로 가기</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="admin-modal" class="modal z-[150]">
+        <div class="bg-white p-6 rounded-3xl w-11/12 max-w-sm shadow-2xl transform transition-all">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center"><i class="fa-solid fa-folder-gear text-blue-600 mr-2"></i>양식 원본 세팅</h3>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <p class="text-[11px] text-slate-500 mb-5 pb-3 border-b border-slate-100">각 서류의 빈 PDF 양식을 기기에 등록합니다. 한 번 등록하면 브라우저에 영구 저장됩니다.</p>
+            
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">1. 통합신청서</div>
+                        <div id="status-main" class="text-[11px] text-rose-500 font-bold mt-1 bg-white inline-block px-2 py-0.5 rounded border border-rose-100">❌ 미등록</div>
+                    </div>
+                    <input type="file" id="file-main" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('main', this)">
+                    <label for="file-main" class="bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition shadow-sm">등록</label>
+                </div>
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">2. 거주/숙소제공서</div>
+                        <div id="status-residence" class="text-[11px] text-rose-500 font-bold mt-1 bg-white inline-block px-2 py-0.5 rounded border border-rose-100">❌ 미등록</div>
+                    </div>
+                    <input type="file" id="file-residence" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('residence', this)">
+                    <label for="file-residence" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition shadow-sm">등록</label>
+                </div>
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">3. 신원보증서</div>
+                        <div id="status-guarantee" class="text-[11px] text-rose-500 font-bold mt-1 bg-white inline-block px-2 py-0.5 rounded border border-rose-100">❌ 미등록</div>
+                    </div>
+                    <input type="file" id="file-guarantee" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('guarantee', this)">
+                    <label for="file-guarantee" class="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition shadow-sm">등록</label>
+                </div>
+            </div>
+            <button onclick="closeAdminModal()" class="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold shadow-lg hover:bg-slate-800 transition">설정 완료</button>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal z-[200]">
+        <div class="bg-white p-7 rounded-3xl w-10/12 max-w-xs shadow-2xl text-center">
+            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500">
+                <i class="fa-solid fa-circle-question text-3xl"></i>
+            </div>
+            <h3 id="confirm-title" class="text-xl font-extrabold mb-2 text-slate-800">확인</h3>
+            <p id="confirm-desc" class="text-sm text-slate-500 mb-6 leading-relaxed whitespace-pre-wrap"></p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirm()" class="w-1/2 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition">취소</button>
+                <button id="confirm-ok-btn" class="w-1/2 py-3 bg-blue-600 text-white rounded-xl font-bold shadow-md hover:bg-blue-700 transition">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="msg-modal" class="modal z-[200]">
+        <div class="bg-white p-7 rounded-3xl w-10/12 max-w-xs shadow-2xl text-center">
+            <div id="msg-icon" class="mb-4"></div>
+            <h3 id="msg-title" class="text-xl font-extrabold mb-2 text-slate-800">알림</h3>
+            <p id="msg-desc" class="text-sm text-slate-500 mb-6 leading-relaxed whitespace-pre-wrap"></p>
+            <button onclick="closeMsg()" class="w-full py-3.5 bg-blue-600 text-white rounded-xl font-bold shadow-md hover:bg-blue-700 transition">확인</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 0. 자동 임시저장 및 동적 UI 제어 ---
+        let autoSaveTimer;
+        
+        document.addEventListener('input', (e) => {
+            if (e.target.type === 'file') return; 
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(saveFormData, 500);
+        });
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'file') return;
+            saveFormData();
+        });
+
+        function saveFormData() {
+            const data = {};
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.type === 'file') return;
+                if (el.type === 'radio' || el.type === 'checkbox') {
+                    if (el.name) data[`${el.name}_${el.value}`] = el.checked;
+                    else if (el.id) data[el.id] = el.checked;
+                } else {
+                    if (el.id) data[el.id] = el.value;
+                }
+            });
+            try { localStorage.setItem('visaAutoSave', JSON.stringify(data)); } catch(e) {}
+        }
+
+        function loadFormData() {
+            try {
+                const saved = localStorage.getItem('visaAutoSave');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    document.querySelectorAll('input, select').forEach(el => {
+                        if (el.type === 'file') return;
+                        if (el.type === 'radio' || el.type === 'checkbox') {
+                            let key = el.name ? `${el.name}_${el.value}` : el.id;
+                            if (data[key] !== undefined) el.checked = data[key];
+                        } else {
+                            if (el.id && data[el.id] !== undefined) el.value = data[el.id];
+                        }
+                    });
+                }
+            } catch(e) { console.warn("임시저장 로드 실패"); }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFormData();
+            updateTemplateStatusUI();
+            handleModeChange(); 
+        });
+
+        function handleModeChange() {
+            const req = document.querySelector('input[name="reqType"]:checked')?.value;
+            const submitter = document.querySelector('input[name="submitter"]:checked')?.value || 'self';
+            
+            // 라디오버튼 UI 강조 효과 리셋 및 세팅
+            document.querySelectorAll('input[name="reqType"]').forEach(el => {
+                const lbl = el.closest('label');
+                lbl.className = 'flex items-center p-4 border rounded-xl hover:bg-slate-50 cursor-pointer transition border-slate-200 bg-white h-full';
+                lbl.querySelector('span:first-of-type, div>span').className = 'font-bold text-slate-700 block';
+            });
+            const activeReq = document.querySelector('input[name="reqType"]:checked');
+            if(activeReq) {
+                const activeLbl = activeReq.closest('label');
+                activeLbl.className = 'flex items-center p-4 border rounded-xl cursor-pointer transition border-blue-400 bg-blue-50/50 ring-1 ring-blue-400 shadow-sm h-full';
+                activeLbl.querySelector('span:first-of-type, div>span').className = 'font-bold text-blue-800 block';
+            }
+
+            document.getElementById('wrap_new_workplace').classList.add('hidden');
+            document.getElementById('wrap_reentry_period').classList.add('hidden');
+            document.getElementById('wrap_refund_acc').classList.add('hidden');
+            document.getElementById('wrap_dorm').classList.add('hidden');
+            
+            document.getElementById('wrap_family_proxy').classList.add('hidden');
+            document.getElementById('wrap_spouse').classList.add('hidden');
+            document.getElementById('wrap_parents').classList.add('hidden');
+
+            if (req === 'chk_change_work') document.getElementById('wrap_new_workplace').classList.remove('hidden');
+            if (req === 'chk_reentry') document.getElementById('wrap_reentry_period').classList.remove('hidden');
+            if (req === 'chk_alien_reg' || req === 'chk_reissue') document.getElementById('wrap_refund_acc').classList.remove('hidden');
+            if (req === 'chk_extension' || req === 'chk_change_work' || req === 'chk_alien_reg' || req === 'chk_change_residence') document.getElementById('wrap_dorm').classList.remove('hidden');
+            
+            if (submitter === 'spouse') {
+                document.getElementById('wrap_family_proxy').classList.remove('hidden');
+                document.getElementById('wrap_spouse').classList.remove('hidden');
+            } else if (submitter === 'parents') {
+                document.getElementById('wrap_family_proxy').classList.remove('hidden');
+                document.getElementById('wrap_parents').classList.remove('hidden');
+            }
+            autoSuggestDocs();
+        }
+
+        // --- 1. UI 모달 및 네비게이션 ---
+        let confirmAction = null;
+        function showConfirm(title, desc, actionFn) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-desc').innerText = desc;
+            confirmAction = actionFn;
+            document.getElementById('confirm-modal').classList.add('active');
+        }
+        function closeConfirm() {
+            document.getElementById('confirm-modal').classList.remove('active');
+            confirmAction = null;
+        }
+        document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+            if(confirmAction) confirmAction();
+            closeConfirm();
+        });
+
+        function showMsg(title, desc, type='info') {
+            const iconWrap = document.getElementById('msg-icon');
+            if(type === 'info') iconWrap.innerHTML = '<div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-blue-500"><i class="fa-solid fa-circle-info text-3xl"></i></div>';
+            else if(type === 'error') iconWrap.innerHTML = '<div class="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center mx-auto text-rose-500"><i class="fa-solid fa-triangle-exclamation text-3xl"></i></div>';
+            else if(type === 'success') iconWrap.innerHTML = '<div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto text-green-500"><i class="fa-solid fa-circle-check text-3xl"></i></div>';
+            
+            document.getElementById('msg-title').innerText = title;
+            document.getElementById('msg-desc').innerText = desc;
+            document.getElementById('msg-modal').classList.add('active');
+        }
+        function closeMsg() { document.getElementById('msg-modal').classList.remove('active'); }
+        function openAdminModal() { document.getElementById('admin-modal').classList.add('active'); updateTemplateStatusUI(); }
+        function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
+
+        function goHome() { 
+            showConfirm('홈 화면 이동', '현재 작성 중인 내용은 자동 임시저장됩니다.\n첫 화면으로 돌아가시겠습니까?', () => { nextStep(0); });
+        }
+
+        function clearFormData() {
+            showConfirm('데이터 초기화', '작성 중인 모든 입력값을 영구적으로 지우고\n처음부터 새로 작성하시겠습니까?', () => {
+                document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"], input[type="email"], input[type="tel"]').forEach(el => el.value = '');
+                document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+                
+                document.getElementById('i_gender').value = 'M';
+                document.getElementById('i_cname').value = '에이치디현대삼호 주식회사';
+                document.getElementById('i_cregno').value = '411-81-19799';
+                document.getElementById('i_rep_name').value = '신현대';
+                document.getElementById('i_cphone').value = '061-460-2114';
+                document.getElementById('i_caddr').value = '전라남도 영암군 삼호읍 대불로 93';
+                document.getElementById('i_job').value = '조선업';
+                document.querySelector('input[name="visaType"][value="E-9"]').checked = true;
+                document.querySelector('input[name="reqType"][value="chk_extension"]').checked = true;
+                document.querySelector('input[name="submitter"][value="self"]').checked = true;
+                document.querySelector('input[name="r_own"][value="own_self"]').checked = true;
+                document.querySelector('input[name="r_type"][value="type_dorm"]').checked = true;
+                
+                document.getElementById('download-zone').innerHTML = '';
+                document.getElementById('download-zone').classList.add('hidden');
+                
+                handleModeChange();
+                saveFormData(); 
+                nextStep(0);
+                showMsg('초기화 완료', '모든 입력 내용이 삭제되었습니다.', 'success');
+            });
+        }
+
+        function nextStep(step) {
+            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            const progContainer = document.getElementById('progress-container');
+            if(step === 0) {
+                progContainer.classList.add('hidden'); 
+            } else {
+                progContainer.classList.remove('hidden');
+                document.getElementById('progress-bar').style.width = ((step / 6) * 100) + '%';
+            }
+            window.scrollTo(0,0);
+        }
+        function prevStep(step) { nextStep(step); }
+
+        // --- 2. 템플릿 파일 업로드 ---
+        function uploadSpecificTemplate(docType, inputEl) {
+            if(inputEl.files.length === 0) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    localStorage.setItem(`visaPdfTemplate_${docType}`, e.target.result.split(',')[1]);
+                    const names = { 'main':'통합신청서', 'residence':'거주/숙소제공서', 'guarantee':'신원보증서' };
+                    showMsg('양식 등록 완료', `[${names[docType]}] 양식이 기기에 저장되었습니다.`, 'success');
+                    updateTemplateStatusUI();
+                } catch(err) {
+                    showMsg('저장 오류', '브라우저 보안 설정이나 용량 제한으로 인해 저장이 차단되었습니다.', 'error');
+                }
+                inputEl.value = ''; 
+            };
+            reader.readAsDataURL(inputEl.files[0]);
+        }
+
+        function updateTemplateStatusUI() {
+            const types = [ {id: 'main'}, {id: 'residence'}, {id: 'guarantee'} ];
+            types.forEach(t => {
+                const statusEl = document.getElementById(`status-${t.id}`);
+                if(statusEl) {
+                    try {
+                        if (localStorage.getItem(`visaPdfTemplate_${t.id}`)) {
+                            statusEl.innerHTML = '<i class="fa-solid fa-check mr-1"></i> 등록 완료'; 
+                            statusEl.className = 'text-[11px] text-emerald-600 font-bold mt-1 bg-emerald-50 inline-block px-2 py-0.5 rounded border border-emerald-100';
+                        } else {
+                            statusEl.innerHTML = '<i class="fa-solid fa-xmark mr-1"></i> 미등록'; 
+                            statusEl.className = 'text-[11px] text-rose-500 font-bold mt-1 bg-white inline-block px-2 py-0.5 rounded border border-rose-100';
+                        }
+                    } catch(e) {
+                        statusEl.innerHTML = '보안 차단됨';
+                    }
+                }
+            });
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+            return bytes.buffer;
+        }
+
+        // --- 3. 입력 자동 포맷팅 ---
+        document.addEventListener('input', function(e) {
+            const target = e.target;
+            
+            // 날짜 (YYYY-MM-DD) 자동 포맷팅
+            if (target.classList.contains('date-format')) {
+                let val = target.value.replace(/[^0-9]/g, '');
+                if (val.length < 5) {
+                    target.value = val;
+                } else if (val.length < 7) {
+                    target.value = val.replace(/(\d{4})(\d+)/, '$1-$2');
+                } else {
+                    target.value = val.replace(/(\d{4})(\d{2})(\d{1,2}).*/, '$1-$2-$3');
+                }
+                return;
+            }
+
+            if (target.type === 'tel' && target.id !== 'i_home_phone') {
+                let val = target.value.replace(/[^0-9]/g, ''); let res = '';
+                if (val.startsWith('02')) { 
+                    if (val.length < 3) res = val; else if (val.length < 6) res = val.replace(/(\d{2})(\d+)/, '$1-$2');
+                    else if (val.length < 10) res = val.replace(/(\d{2})(\d{3})(\d+)/, '$1-$2-$3'); else res = val.replace(/(\d{2})(\d{4})(\d{4}).*/, '$1-$2-$3');
+                } else { 
+                    if (val.length < 4) res = val; else if (val.length < 7) res = val.replace(/(\d{3})(\d+)/, '$1-$2');
+                    else if (val.length < 11) res = val.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3'); else res = val.replace(/(\d{3})(\d{4})(\d{4}).*/, '$1-$2-$3'); 
+                }
+                target.value = res;
+            }
+            if (target.id === 'i_home_phone') target.value = target.value.replace(/[^0-9+\- ]/g, ''); 
+            
+            if (target.id === 'i_arc' || target.id === 'i_rep_id') {
+                let val = target.value.replace(/[^0-9]/g, '');
+                if (val.length < 7) target.value = val; else target.value = val.replace(/(\d{6})(\d{1,7}).*/, '$1-$2');
+            }
+            
+            if (target.id.includes('regno')) {
+                let val = target.value.replace(/[^0-9]/g, '');
+                if (val.length < 4) target.value = val; else if (val.length < 6) target.value = val.replace(/(\d{3})(\d+)/, '$1-$2');
+                else target.value = val.replace(/(\d{3})(\d{2})(\d{1,5}).*/, '$1-$2-$3');
+            }
+        });
+
+        // --- 4. 정밀 AI 교차 검증 엔진 ---
+        let uploadedImagesBase64 = [];
+        
+        function previewFiles() {
+            const files = document.getElementById('doc-uploads').files;
+            const container = document.getElementById('file-preview-container');
+            container.innerHTML = ''; uploadedImagesBase64 = [];
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const fileData = e.target.result;
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img'); img.src = fileData;
+                        img.className = 'h-16 w-16 object-cover rounded-xl shadow-sm border border-white/20 flex-shrink-0';
+                        container.appendChild(img);
+                    } else if (file.type === 'application/pdf') {
+                        const div = document.createElement('div');
+                        div.className = 'h-16 w-16 flex flex-col items-center justify-center bg-white/10 rounded-xl shadow-sm border border-white/20 flex-shrink-0 text-center backdrop-blur-sm';
+                        div.innerHTML = '<i class="fa-solid fa-file-pdf text-2xl mb-1 text-red-300"></i><span class="text-[9px] font-bold text-white">PDF</span>';
+                        container.appendChild(div);
+                    } else {
+                        const div = document.createElement('div');
+                        div.className = 'h-16 w-16 flex flex-col items-center justify-center bg-white/10 rounded-xl shadow-sm border border-white/20 flex-shrink-0 text-center overflow-hidden px-1 backdrop-blur-sm';
+                        div.innerHTML = '<i class="fa-solid fa-file text-xl mb-1 text-indigo-300"></i><span class="text-[8px] font-bold text-white break-all line-clamp-1">' + file.name + '</span>';
+                        container.appendChild(div);
+                    }
+                    uploadedImagesBase64.push({ mimeType: file.type, data: fileData.split(',')[1] });
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        async function fetchWithBackoff(url, payload) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < delays.length + 1; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP 에러: ${response.status}`);
+                    return await response.json();
+                } catch (e) {
+                    if (i === delays.length) throw e;
+                    await new Promise(r => setTimeout(r, delays[i]));
+                }
+            }
+        }
+
+        async function runAIVerification() {
+            if(uploadedImagesBase64.length === 0) return showMsg('안내', '검증할 증빙 서류를 업로드해주세요.', 'info');
+            const btn = document.getElementById('btn-run-ai'); 
+            const resultBox = document.getElementById('ai-result-box');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 초정밀 교차 대조 분석 중...'; 
+            btn.disabled = true; 
+            resultBox.classList.add('hidden');
+
+            const getVal = (id) => document.getElementById(id)?.value || '';
+            const getUpperVal = (id) => getVal(id).toUpperCase();
+            
+            const formData = {
+                "외국인 인적사항": {
+                    "성명(영문)": getUpperVal('i_surname') + ' ' + getUpperVal('i_givenname'),
+                    "생년월일": getVal('i_dob'),
+                    "국적": getUpperVal('i_nation'),
+                    "외국인등록번호": getVal('i_arc'),
+                    "여권번호": getUpperVal('i_passport'),
+                    "체류지 주소": getVal('i_address_kr'),
+                    "연소득금액": getVal('i_income') ? getVal('i_income') + "만원" : "",
+                    "직업": getVal('i_job')
+                },
+                "근무처(고용주) 정보": {
+                    "원 근무처 회사명": getVal('i_cname'),
+                    "원 근무처 사업자등록번호": getVal('i_cregno'),
+                    "대표자 성명": getVal('i_rep_name'),
+                    "대표자 주민번호": getVal('i_rep_id'),
+                    "회사 전화번호": getVal('i_cphone'),
+                    "회사 주소": getVal('i_caddr')
+                }
+            };
+
+            try {
+                const prompt = `당신은 대한민국 법무부 출입국·외국인정책본부의 전문 비자 서류 심사관입니다.
+업로드된 신분증/서류들을 정밀 판독하여 아래 [신청서 데이터]와 일치하는지, [제출된 서류 상호 간] 모순이 없는지 교차 검증하세요.
+
+[특명: 저해상도 흐린 문서 판독 지침]
+- 팩스본 등 화질이 낮아 글씨가 뭉개져 있더라도 포기하지 마십시오. 문서 맥락을 파악해 최대한 판독하십시오.
+- 오독 의심 부분은 [신청서 데이터]와 대조해 문맥상 가장 적합한 단어로 추론하십시오.
+
+[신청서 데이터]
+${JSON.stringify(formData, null, 2)}
+
+[정밀 교차 검증 필수 항목]
+1. 인적사항 대조 (신청서 vs 모든 서류): 영문 성명(Spelling), 생일, 번호 등 100% 일치 여부
+2. 근무처 정보 대조 (신청서 vs 사업자등록증 vs 근로계약서): 회사명, 사업자번호, 대표자명, 주소 일치 여부
+3. 소득/직업 대조: 신청서 '연소득금액'이 증빙 서류(근로계약서 급여, 소득금액증명) 내용과 모순되지 않는가?
+4. 서류 간 자체 모순 (Document vs Document): 서류끼리의 정보 충돌 여부
+
+오류 발견 시 status "FAIL", issues 배열에 상세 원인 작성. 오류 없으면 "PASS".`;
+
+                const parts = [{ text: prompt }];
+                uploadedImagesBase64.forEach(doc => parts.push({ inlineData: { mimeType: doc.mimeType, data: doc.data } }));
+                const payload = {
+                    contents: [{ role: "user", parts: parts }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT", properties: {
+                                "status": { type: "STRING" },
+                                "issues": { type: "ARRAY", items: { type: "OBJECT", properties: { "category": { type: "STRING" }, "description": { type: "STRING" }, "recommendation": { type: "STRING" } } } }
+                            }
+                        }
+                    }
+                };
+
+                const apiKey = "AQ.Ab8RN6KH-cQvSDGWHOhMX9PFUH2JYw__6niM6lNsis2FKTTSDQ"; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                const result = await fetchWithBackoff(apiUrl, payload);
+                if (result.error) throw new Error(result.error.message);
+                
+                const aiData = JSON.parse(result.candidates[0].content.parts[0].text);
+
+                resultBox.classList.remove('hidden', 'bg-white', 'text-slate-800', 'border-slate-200');
+                if(aiData.status === 'PASS' || !aiData.issues?.length) {
+                    resultBox.className = 'bg-white text-emerald-800 border-2 border-emerald-400 rounded-2xl p-5 mb-6 text-sm shadow-lg shadow-emerald-500/20';
+                    resultBox.innerHTML = `<div class="font-extrabold text-base mb-2 flex items-center"><i class="fa-solid fa-circle-check text-2xl mr-2 text-emerald-500"></i> 검증 완료: 100% 일치합니다.</div><p class="text-emerald-600 font-medium">모든 증빙서류와 신청서의 교차 대조 결과, 단 하나의 모순도 발견되지 않았습니다.</p>`;
+                } else {
+                    resultBox.className = 'bg-white text-rose-900 border-2 border-rose-400 rounded-2xl p-5 mb-6 text-sm shadow-lg shadow-rose-500/20';
+                    let html = `<div class="font-extrabold text-base mb-3 flex items-center text-rose-600"><i class="fa-solid fa-triangle-exclamation text-2xl mr-2"></i> 불일치 및 오류 발견 (${aiData.issues.length}건)</div><div class="space-y-3">`;
+                    aiData.issues.forEach(iss => { html += `<div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><span class="inline-block px-2 py-1 bg-rose-200 text-rose-800 text-[10px] font-bold rounded-md mb-1">${iss.category}</span><div class="font-bold text-sm text-slate-800 mb-1">${iss.description}</div><div class="text-xs text-rose-600">${iss.recommendation}</div></div>`; });
+                    resultBox.innerHTML = html + `</div>`;
+                }
+            } catch (e) { 
+                console.error(e);
+                showMsg('AI 통신 오류', '검증 서버 연결에 실패했습니다.\n사유: ' + e.message + '\n\n서류 생성 단계는 정상 진행 가능합니다.', 'error'); 
+            } finally { 
+                btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 다시 대조하기'; btn.disabled = false; 
+            }
+        }
+
+        function autoSuggestDocs() {
+            const visa = document.querySelector('input[name="visaType"]:checked')?.value;
+            const req = document.querySelector('input[name="reqType"]:checked')?.value;
+            
+            document.getElementById('gen_main').checked = true;
+            document.getElementById('gen_residence').checked = false;
+            document.getElementById('gen_guarantee').checked = false;
+
+            if (req === 'chk_extension' || req === 'chk_change_work' || req === 'chk_alien_reg') {
+                document.getElementById('gen_residence').checked = true; 
+            }
+            if (visa === 'E-7' && (req === 'chk_extension' || req === 'chk_change_status')) {
+                document.getElementById('gen_guarantee').checked = true; 
+            }
+        }
+        
+        function prepareGenerate() {
+            autoSuggestDocs();
+            nextStep(6);
+        }
+
+        // --- 5. 스마트 PDF 일괄 생성 엔진 ---
+        const PDF_COORDS_MAIN = {
+            chk_alien_reg: { type: 'check', x: 69, y: 696 }, chk_reissue: { type: 'check', x: 67, y: 663 },
+            chk_extension: { type: 'check', x: 68, y: 639 }, chk_change_status: { type: 'check', x: 68, y: 616 },
+            val_change_status: { type: 'text', x: 187, y: 611, w: 23, h: 9 }, chk_grant_status: { type: 'check', x: 68, y: 580 },
+            chk_extra_act: { type: 'check', x: 226, y: 697 }, chk_change_work: { type: 'check', x: 228, y: 663 },
+            chk_reentry: { type: 'check', x: 226, y: 639 }, chk_change_residence: { type: 'check', x: 226, y: 616 },
+            surname: { type: 'text', x: 128, y: 524, w: 137, h: 11 }, givenname: { type: 'text', x: 269, y: 524, w: 159, h: 11 },
+            dob_yyyy: { type: 'text', x: 147, y: 496, w: 80, h: 13 }, dob_mm: { type: 'text', x: 228, y: 498, w: 38, h: 11 }, dob_dd: { type: 'text', x: 268, y: 498, w: 39, h: 11 }, 
+            gender_m: { type: 'check', x: 370, y: 516 }, gender_f: { type: 'check', x: 369, y: 505 }, nation: { type: 'text', x: 482, y: 476, w: 56, h: 46 },
+            arc_1: { type: 'text', x: 187, y: 476, w: 19, h: 20 }, arc_2: { type: 'text', x: 207, y: 476, w: 20, h: 20 }, arc_3: { type: 'text', x: 228, y: 476, w: 19, h: 20 }, arc_4: { type: 'text', x: 249, y: 476, w: 17, h: 20 }, arc_5: { type: 'text', x: 269, y: 476, w: 19, h: 20 }, arc_6: { type: 'text', x: 289, y: 476, w: 18, h: 20 }, arc_7: { type: 'text', x: 308, y: 476, w: 17, h: 20 }, arc_8: { type: 'text', x: 325, y: 476, w: 19, h: 20 }, arc_9: { type: 'text', x: 343, y: 476, w: 16, h: 20 }, arc_10: { type: 'text', x: 362, y: 476, w: 16, h: 20 }, arc_11: { type: 'text', x: 378, y: 476, w: 17, h: 20 }, arc_12: { type: 'text', x: 397, y: 476, w: 16, h: 20 }, arc_13: { type: 'text', x: 414, y: 476, w: 16, h: 20 },
+            passport: { type: 'text', x: 127, y: 454, w: 101, h: 21 }, pass_issue: { type: 'text', x: 308, y: 454, w: 87, h: 21 }, pass_exp: { type: 'text', x: 480, y: 455, w: 59, h: 21 },
+            address_kr: { type: 'text', x: 127, y: 434, w: 412, h: 20 }, phone: { type: 'text', x: 184, y: 419, w: 113, h: 13 }, cellphone: { type: 'text', x: 417, y: 420, w: 121, h: 13 },
+            address_home: { type: 'text', x: 185, y: 399, w: 231, h: 21 }, home_phone: { type: 'text', x: 483, y: 398, w: 55, h: 21 },
+            cname: { type: 'text', x: 208, y: 335, w: 53, h: 20 }, cregno: { type: 'text', x: 355, y: 335, w: 59, h: 20 }, cphone: { type: 'text', x: 482, y: 334, w: 57, h: 21 },
+            new_cname: { type: 'text', x: 207, y: 313, w: 53, h: 21 }, new_cregno: { type: 'text', x: 356, y: 313, w: 59, h: 20 }, new_cphone: { type: 'text', x: 482, y: 313, w: 56, h: 21 },
+            job: { type: 'text', x: 483, y: 299, w: 55, h: 15 }, income: { type: 'text', x: 207, y: 299, w: 47, h: 14 }, reentry_period: { type: 'text', x: 208, y: 287, w: 53, h: 13 }, email: { type: 'text', x: 355, y: 286, w: 163, h: 13 }, refund_acc: { type: 'text', x: 356, y: 266, w: 183, h: 19 },
+            app_date: { type: 'text', x: 208, y: 252, w: 87, h: 13 }, sign_main: { type: 'text', x: 436, y: 252, w: 101, h: 13 }, sign_sub_1: { type: 'text', x: 99, y: 130, w: 64, h: 22 }, sign_sub_2: { type: 'text', x: 274, y: 130, w: 57, h: 19 }, sign_sub_3: { type: 'text', x: 449, y: 130, w: 40, h: 18 }
+        };
+
+        const PDF_COORDS_RESIDENCE = {
+            f_nation: { type: 'text', x: 167, y: 683, w: 84, h: 45 }, f_arc: { type: 'text', x: 388, y: 683, w: 142, h: 45 },
+            f_name: { type: 'text', x: 168, y: 656, w: 194, h: 25 }, f_phone: { type: 'text', x: 429, y: 654, w: 103, h: 26 }, f_addr: { type: 'text', x: 168, y: 629, w: 362, h: 25 },
+            p_nation: { type: 'text', x: 167, y: 554, w: 73, h: 38 }, p_id: { type: 'text', x: 378, y: 554, w: 153, h: 39 }, p_name: { type: 'text', x: 168, y: 525, w: 207, h: 25 }, p_phone: { type: 'text', x: 429, y: 525, w: 99, h: 25 },
+            rel_family: { type: 'check', x: 182, y: 503 }, rel_employer: { type: 'check', x: 271, y: 502 }, rel_other: { type: 'check', x: 366, y: 502 }, rel_other_desc: { type: 'text', x: 428, y: 509, w: 96, h: 13 },
+            own_self: { type: 'check', x: 181, y: 468 }, own_rent: { type: 'check', x: 273, y: 470 }, own_other: { type: 'check', x: 380, y: 469 }, own_other_desc: { type: 'text', x: 440, y: 468, w: 83, h: 14 },
+            type_private: { type: 'check', x: 181, y: 441 }, type_dorm: { type: 'check', x: 325, y: 441 }, type_hotel: { type: 'check', x: 182, y: 413 }, type_other: { type: 'check', x: 326, y: 412 }, type_other_desc: { type: 'text', x: 388, y: 406, w: 131, h: 17 },
+            start_y: { type: 'text', x: 169, y: 374, w: 45, h: 19 }, start_m: { type: 'text', x: 254, y: 374, w: 37, h: 18 }, start_d: { type: 'text', x: 342, y: 373, w: 36, h: 21 },
+            sign_y: { type: 'text', x: 150, y: 313, w: 61, h: 17 }, sign_m: { type: 'text', x: 250, y: 314, w: 23, h: 16 }, sign_d: { type: 'text', x: 316, y: 314, w: 21, h: 14 },
+            p_sign_name: { type: 'text', x: 261, y: 290, w: 69, h: 17 }, p_company: { type: 'text', x: 263, y: 275, w: 68, h: 15 }
+        };
+
+        const PDF_COORDS_GUARANTEE = {
+            f_surname: { type: 'text', x: 131, y: 672, w: 127, h: 30 }, f_givenname: { type: 'text', x: 274, y: 672, w: 134, h: 29 }, f_hanja: { type: 'text', x: 434, y: 672, w: 97, h: 29 },
+            f_dob: { type: 'text', x: 163, y: 640, w: 245, h: 29 }, f_sex_m: { type: 'check', x: 465, y: 654 }, f_sex_f: { type: 'check', x: 507, y: 654 },
+            f_nation: { type: 'text', x: 149, y: 607, w: 258, h: 31 }, f_pass: { type: 'text', x: 450, y: 607, w: 81, h: 31 },
+            f_addr: { type: 'text', x: 181, y: 576, w: 226, h: 30 }, f_phone: { type: 'text', x: 451, y: 577, w: 80, h: 28 }, f_purpose: { type: 'text', x: 166, y: 546, w: 362, h: 27 },
+            p_name: { type: 'text', x: 145, y: 474, w: 260, h: 27 }, p_hanja: { type: 'text', x: 434, y: 473, w: 97, h: 28 }, p_nation: { type: 'text', x: 147, y: 444, w: 258, h: 25 },
+            p_sex_m: { type: 'check', x: 466, y: 457 }, p_sex_f: { type: 'check', x: 508, y: 456 },
+            p_dob: { type: 'text', x: 220, y: 413, w: 186, h: 29 }, p_phone: { type: 'text', x: 450, y: 414, w: 79, h: 27 }, p_addr: { type: 'text', x: 143, y: 381, w: 385, h: 30 },
+            p_rel: { type: 'text', x: 199, y: 352, w: 330, h: 29 }, p_company: { type: 'text', x: 153, y: 320, w: 253, h: 29 }, p_job: { type: 'text', x: 436, y: 321, w: 93, h: 27 },
+            p_caddr: { type: 'text', x: 178, y: 290, w: 228, h: 27 }, p_note: { type: 'text', x: 437, y: 290, w: 93, h: 27 }, p_period: { type: 'text', x: 338, y: 260, w: 189, h: 25 }, 
+            sign_y: { type: 'text', x: 355, y: 96, w: 60, h: 13 }, sign_m: { type: 'text', x: 429, y: 98, w: 34, h: 12 }, sign_d: { type: 'text', x: 480, y: 97, w: 31, h: 13 }, p_sign_name: { type: 'text', x: 356, y: 66, w: 124, h: 20 }
+        };
+
+        async function createSingleDoc(docType, fontBuffer, getVal, PDFDocument, rgb) {
+            const tplB64 = localStorage.getItem(`visaPdfTemplate_${docType}`);
+            
+            if (!tplB64) {
+                const names = { 'main':'통합신청서', 'residence':'거주/숙소제공서', 'guarantee':'신원보증서' };
+                throw new Error(`[${names[docType]}] 양식(PDF)이 미등록 상태입니다.\n우측 상단 '양식 설정'에서 파일을 먼저 등록해주세요.`);
+            }
+            
+            const pdfDoc = await PDFDocument.load(base64ToArrayBuffer(tplB64));
+            pdfDoc.registerFontkit(fontkit);
+            const font = await pdfDoc.embedFont(fontBuffer); 
+            
+            const page = pdfDoc.getPages()[0];
+            const inkColor = rgb(0.1, 0.2, 0.8);
+            
+            const coords = docType === 'main' ? PDF_COORDS_MAIN : (docType === 'residence' ? PDF_COORDS_RESIDENCE : PDF_COORDS_GUARANTEE);
+
+            const drawBox = (coordKey, text) => {
+                if(!text) return; const pos = coords[coordKey]; if(!pos) return;
+                if(pos.type === 'check') { page.drawText('V', { x: pos.x - 5, y: pos.y - 5, size: 12, font: font, color: inkColor }); return; }
+                if(pos.type === 'text' && pos.w && pos.h) {
+                    let str = String(text).trim(); let fontSize = 9; let lines = []; let lineHeight = 0;
+                    if(str.includes('\n')) {
+                        lines = str.split('\n'); lineHeight = fontSize * 1.2;
+                        while(fontSize >= 6) {
+                            let tooWide = false;
+                            for(let l of lines) { if(font.widthOfTextAtSize(l, fontSize) > pos.w) tooWide = true; }
+                            if(!tooWide && (lines.length * lineHeight <= pos.h)) break;
+                            fontSize -= 0.5; lineHeight = fontSize * 1.2;
+                        }
+                    } else {
+                        while (fontSize >= 6) {
+                            lines = []; let tempLine = ''; lineHeight = fontSize * 1.2;
+                            for(let i = 0; i < str.length; i++) {
+                                let char = str[i]; let testLine = tempLine + char;
+                                if(font.widthOfTextAtSize(testLine, fontSize) > pos.w - 2) { 
+                                    let breakFound = false;
+                                    for(let j = tempLine.length - 1; j > 0; j--) {
+                                        if (tempLine[j] === '-' || tempLine[j] === ' ') {
+                                            lines.push(tempLine.substring(0, j)); tempLine = (tempLine[j]==='-'?'-':'') + tempLine.substring(j + 1) + char;
+                                            breakFound = true; break;
+                                        }
+                                    }
+                                    if(!breakFound) { if(tempLine !== '') { lines.push(tempLine); tempLine = char; } else { lines.push(testLine); tempLine = ''; } }
+                                } else { tempLine = testLine; }
+                            }
+                            if(tempLine) lines.push(tempLine);
+                            if (lines.length * lineHeight <= pos.h + 2) break; fontSize -= 0.5; 
+                        }
+                    }
+                    let totalH = lines.length * lineHeight;
+                    let startY = pos.y + (pos.h / 2) + (totalH / 2) - fontSize + (fontSize * 0.2); 
+                    lines.forEach((line, idx) => {
+                        let drawY = startY - (idx * lineHeight); let textW = font.widthOfTextAtSize(line.trim(), fontSize);
+                        let drawX = pos.x + (pos.w / 2) - (textW / 2); if (drawX < pos.x) drawX = pos.x; 
+                        page.drawText(line.trim(), { x: drawX, y: drawY, size: fontSize, font: font, color: inkColor });
+                    });
+                }
+            };
+
+            const getUpperVal = (id) => getVal(id).toUpperCase();
+            const fullFName = getUpperVal('i_surname') + ' ' + getUpperVal('i_givenname');
+            const today = new Date(); const ty = String(today.getFullYear()); const tm = String(today.getMonth()+1); const td = String(today.getDate());
+
+            if (docType === 'main') {
+                const reqType = document.querySelector('input[name="reqType"]:checked')?.value;
+                if(reqType) drawBox(reqType, 'check');
+                drawBox('val_change_status', getUpperVal('val_change_status'));
+                drawBox('surname', getUpperVal('i_surname')); drawBox('givenname', getUpperVal('i_givenname'));
+                const dob = getVal('i_dob'); if(dob) { const p = dob.split('-'); drawBox('dob_yyyy', p[0]); drawBox('dob_mm', p[1]); drawBox('dob_dd', p[2]); }
+                const gender = getVal('i_gender'); if(gender === 'M') drawBox('gender_m', 'check'); if(gender === 'F') drawBox('gender_f', 'check');
+                drawBox('nation', getUpperVal('i_nation'));
+                const arcRaw = getVal('i_arc').replace(/-/g, ''); for(let i=0; i<arcRaw.length; i++) { if(i < 13) drawBox(`arc_${i+1}`, arcRaw[i]); }
+                drawBox('passport', getUpperVal('i_passport')); drawBox('pass_issue', getVal('i_pass_issue')); drawBox('pass_exp', getVal('i_pass_exp'));
+                drawBox('address_kr', getVal('i_address_kr')); drawBox('phone', getVal('i_phone')); drawBox('cellphone', getVal('i_cellphone'));
+                drawBox('address_home', getUpperVal('i_address_home')); drawBox('home_phone', getVal('i_home_phone'));
+                drawBox('cname', getVal('i_cname')); drawBox('cregno', getVal('i_cregno')); drawBox('cphone', getVal('i_cphone'));
+                drawBox('new_cname', getVal('i_new_cname')); drawBox('new_cregno', getVal('i_new_cregno')); drawBox('new_cphone', getVal('i_new_cphone'));
+                drawBox('job', getVal('i_job')); drawBox('income', getVal('i_income')); drawBox('reentry_period', getVal('i_reentry_period')); drawBox('email', getUpperVal('i_email'));
+                let refundStr = ''; if (getVal('i_refund_bank') || getVal('i_refund_acc')) refundStr = `${getVal('i_refund_bank')} / ${getVal('i_refund_acc')}`.replace(/^ \/ | \/ $/g, ''); 
+                drawBox('refund_acc', refundStr);
+                drawBox('app_date', `${ty}.${tm}.${td}`); 
+                drawBox('sign_main', fullFName.replace('\n', ' ')); 
+                
+                const submitter = document.querySelector('input[name="submitter"]:checked')?.value || 'self';
+                if (submitter === 'self') {
+                    drawBox('sign_sub_1', fullFName); 
+                } else if (submitter === 'spouse') {
+                    drawBox('sign_sub_2', getUpperVal('i_spouse').replace(' ', '\n'));
+                } else if (submitter === 'parents') {
+                    drawBox('sign_sub_3', getUpperVal('i_parents').replace(' ', '\n'));
+                }
+
+            } else if (docType === 'residence') {
+                drawBox('f_nation', getUpperVal('i_nation')); drawBox('f_name', fullFName);
+                drawBox('f_arc', getVal('i_arc')); drawBox('f_phone', getVal('i_cellphone')); drawBox('f_addr', getVal('i_address_kr'));
+                drawBox('p_id', getVal('i_rep_id')); drawBox('p_nation', '대한민국'); drawBox('p_name', getVal('i_cname') + (getVal('i_rep_name')?`(${getVal('i_rep_name')})`:'')); drawBox('p_phone', getVal('i_cphone'));
+                drawBox('rel_employer', 'check'); 
+                const rOwn = document.querySelector('input[name="r_own"]:checked')?.value; if(rOwn) drawBox(rOwn, 'check');
+                const rType = document.querySelector('input[name="r_type"]:checked')?.value; 
+                if(rType === 'type_dorm') drawBox('type_dorm', 'check');
+                if(rType === 'type_private') drawBox('type_private', 'check');
+                if(rType === 'type_hotel') drawBox('type_hotel', 'check');
+                
+                const start = getVal('i_dorm_start'); if(start) { const p = start.split('-'); drawBox('start_y', p[0]); drawBox('start_m', p[1]); drawBox('start_d', p[2]); }
+                drawBox('sign_y', ty); drawBox('sign_m', tm); drawBox('sign_d', td);
+                drawBox('p_sign_name', getVal('i_rep_name')); drawBox('p_company', getVal('i_cname'));
+
+            } else if (docType === 'guarantee') {
+                drawBox('f_surname', getUpperVal('i_surname')); drawBox('f_givenname', getUpperVal('i_givenname'));
+                const gFSex = getVal('i_gender'); if(gFSex === 'M') drawBox('f_sex_m', 'check'); if(gFSex === 'F') drawBox('f_sex_f', 'check');
+                drawBox('f_dob', getVal('i_dob')); drawBox('f_nation', getUpperVal('i_nation')); drawBox('f_pass', getUpperVal('i_passport'));
+                drawBox('f_phone', getVal('i_cellphone')); drawBox('f_addr', getVal('i_address_kr')); drawBox('f_purpose', '취업');
+                drawBox('p_name', getVal('i_rep_name')); drawBox('p_nation', '대한민국');
+                const gPSex = getVal('i_rep_gender'); if(gPSex === 'M') drawBox('p_sex_m', 'check'); if(gPSex === 'F') drawBox('p_sex_f', 'check');
+                drawBox('p_dob', getVal('i_rep_id')); drawBox('p_phone', getVal('i_cphone')); drawBox('p_addr', getVal('i_caddr'));
+                drawBox('p_rel', '고용주'); drawBox('p_period', '2년 (최장 4년)'); drawBox('p_company', getVal('i_cname')); drawBox('p_job', '대표이사'); 
+                drawBox('p_caddr', getVal('i_caddr')); drawBox('sign_y', ty); drawBox('sign_m', tm); drawBox('sign_d', td); drawBox('p_sign_name', getVal('i_rep_name'));
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            return new Blob([pdfBytes], { type: 'application/pdf' });
+        }
+
+        async function generateSelectedPDFs() {
+            const btn = document.getElementById('btn-generate-all');
+            const zone = document.getElementById('download-zone');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 초고속 문서 생성 중...'; btn.disabled = true;
+            zone.innerHTML = '';
+            zone.classList.add('hidden');
+
+            const getVal = (id) => document.getElementById(id)?.value || '';
+            const { PDFDocument, rgb } = PDFLib;
+            
+            try {
+                const targets = [
+                    { id: 'gen_main', type: 'main', name: '통합신청서', color: 'bg-blue-600', hoverColor: 'hover:bg-blue-700' },
+                    { id: 'gen_residence', type: 'residence', name: '거주숙소제공확인서', color: 'bg-emerald-600', hoverColor: 'hover:bg-emerald-700' },
+                    { id: 'gen_guarantee', type: 'guarantee', name: '신원보증서', color: 'bg-indigo-600', hoverColor: 'hover:bg-indigo-700' }
+                ];
+
+                // 1. 양식 누락 여부 사전 검사
+                let isSelected = false;
+                for(let t of targets) {
+                    if (document.getElementById(t.id).checked) {
+                        isSelected = true;
+                        if (!localStorage.getItem(`visaPdfTemplate_${t.type}`)) {
+                            throw new Error(`[${t.name}] 빈 양식(PDF)이 없습니다.\n\n우측 상단 '양식 설정' 메뉴를 눌러\n해당 양식을 먼저 등록해주세요.`);
+                        }
+                    }
+                }
+                
+                if(!isSelected) throw new Error("선택된 문서가 없습니다. 생성할 양식을 체크해주세요.");
+
+                const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf';
+                const fontRes = await fetch(fontUrl);
+                if (!fontRes.ok) throw new Error("폰트 다운로드 실패");
+                const fontBuffer = await fontRes.arrayBuffer();
+
+                let successCount = 0;
+                let headerAdded = false;
+
+                for(let t of targets) {
+                    if (document.getElementById(t.id).checked) {
+                        if(!headerAdded) {
+                            zone.innerHTML = '<div class="w-full h-px bg-slate-200 my-2"></div><div class="inline-flex items-center justify-center bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold text-sm mb-2 mx-auto"><i class="fa-solid fa-check mr-2"></i>생성 완료! 버튼을 눌러 저장하세요</div>';
+                            headerAdded = true;
+                        }
+                        const blob = await createSingleDoc(t.type, fontBuffer, getVal, PDFDocument, rgb);
+                        const url = URL.createObjectURL(blob);
+                        
+                        const a = document.createElement('a');
+                        a.href = url; a.download = `${t.name}_${getVal('i_surname').toUpperCase()}.pdf`;
+                        a.className = `block w-full ${t.color} ${t.hoverColor} text-white font-bold py-3.5 rounded-xl shadow-md text-center text-sm transition transform hover:-translate-y-0.5`;
+                        a.innerHTML = `<i class="fa-solid fa-download mr-2"></i> ${t.name} 다운로드`;
+                        zone.appendChild(a);
+                        successCount++;
+                    }
+                }
+                
+                if(successCount === 0) throw new Error("선택된 문서가 없습니다.");
+                zone.classList.remove('hidden');
+
+            } catch(e) {
+                console.error(e); showMsg('생성 오류', e.message, 'error');
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> 선택된 서류 일괄 생성'; btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
