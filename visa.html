@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HD현대삼호 외국인 비자지원 (Master)</title>
+    <title>HD현대삼호 외국인 비자지원 (v2.0)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -60,7 +60,7 @@
                     <i class="fa-solid fa-rotate-right md:mr-2"></i> <span class="hidden md:inline">초기화</span>
                 </button>
             </div>
-            <h1 class="text-base font-extrabold tracking-tight hidden sm:block text-slate-200">HD현대삼호 <span class="text-white">비자 서류 마스터</span></h1>
+            <h1 class="text-base font-extrabold tracking-tight hidden sm:block text-slate-200">HD현대삼호 <span class="text-yellow-300">비자 서류 마스터 (v2.0)</span></h1>
             <button onclick="openAdminModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl shadow-md text-sm font-bold transition border border-blue-400/30 flex items-center">
                 <i class="fa-solid fa-sliders md:mr-2"></i> <span class="hidden md:inline">양식 설정</span>
             </button>
@@ -486,7 +486,6 @@
     </div>
 
     <script>
-        // --- 0. 자동 임시저장 및 동적 UI 제어 ---
         let autoSaveTimer;
         
         document.addEventListener('input', (e) => {
@@ -762,8 +761,9 @@
             });
         }
         
+        // 에러 상세 추적용 함수
         async function fetchWithBackoff(url, payload) {
-            const delays = [1000, 2000, 4000, 8000, 16000];
+            const delays = [1000, 2000, 4000];
             for (let i = 0; i < delays.length + 1; i++) {
                 try {
                     const response = await fetch(url, {
@@ -771,7 +771,15 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error(`HTTP 에러: ${response.status}`);
+                    if (!response.ok) {
+                        const errData = await response.text();
+                        let errMsg = `HTTP 에러: ${response.status}`;
+                        try {
+                            const errJson = JSON.parse(errData);
+                            if(errJson.error && errJson.error.message) errMsg += `\n상세: ${errJson.error.message}`;
+                        } catch(e) { errMsg += `\n상세: ${errData}`; }
+                        throw new Error(errMsg);
+                    }
                     return await response.json();
                 } catch (e) {
                     if (i === delays.length) throw e;
@@ -847,8 +855,8 @@ ${JSON.stringify(formData, null, 2)}
                     }
                 };
 
-                const apiKey = "AQ.Ab8RN6KY04Lvtb6eUpaxRFbvHGFieh3bwZRQraukD1ezqoNtJQ"; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                const apiKey = "AQ.Ab8RN6KY04Lvtb6eUpaxRFbvHGFieh3bwZRQraukD1ezqoNtJQ".trim(); 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
                 
                 const result = await fetchWithBackoff(apiUrl, payload);
                 if (result.error) throw new Error(result.error.message);
@@ -867,7 +875,7 @@ ${JSON.stringify(formData, null, 2)}
                 }
             } catch (e) { 
                 console.error(e);
-                showMsg('AI 통신 오류', '검증 서버 연결에 실패했습니다.\n사유: ' + e.message + '\n\n서류 생성 단계는 정상 진행 가능합니다.', 'error'); 
+                showMsg('AI 통신 오류', '검증 서버 연결에 실패했습니다.\n' + e.message + '\n\n서류 생성 단계는 정상 진행 가능합니다.', 'error'); 
             } finally { 
                 btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 다시 대조하기'; btn.disabled = false; 
             }
