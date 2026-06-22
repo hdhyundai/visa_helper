@@ -139,13 +139,14 @@
                 <button onclick="goHome()" class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold transition flex items-center" title="홈">
                     <i class="fa-solid fa-house"></i>
                 </button>
-                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-700 border border-slate-600 text-white text-xs font-bold rounded-lg px-2 py-2 outline-none cursor-pointer">
+                <select id="lang-selector" onchange="window.changeLanguage(this.value)" class="bg-slate-700 border border-slate-600 text-white text-xs font-bold rounded-lg px-2 py-2 outline-none cursor-pointer">
                     <option value="kr">🇰🇷 한국어</option>
                     <option value="en">🇺🇸 English</option>
                     <option value="vn">🇻🇳 Tiếng Việt</option>
                 </select>
             </div>
             
+            <!-- 회사 이름은 다국어 번역을 타지 않도록 data-i18n 속성 제거됨 -->
             <h1 class="text-sm md:text-base font-extrabold tracking-tight text-slate-200">HD현대삼호 비자지원</h1>
             
             <div class="flex gap-2">
@@ -226,11 +227,11 @@
                     <div class="card-header text-slate-800"><i class="fa-solid fa-passport text-blue-500 mr-2"></i> <span data-i18n="s1_visa">보유 비자 자격</span></div>
                     <div class="flex gap-4 mb-2">
                         <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="visaType" value="E-9" checked onchange="handleModeChange()" class="custom-radio mr-2"> 
+                            <input type="radio" name="visaType" value="E-9" checked onchange="window.handleModeChange()" class="custom-radio mr-2"> 
                             <span class="font-bold">E-9</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="visaType" value="E-7" onchange="handleModeChange()" class="custom-radio mr-2"> 
+                            <input type="radio" name="visaType" value="E-7" onchange="window.handleModeChange()" class="custom-radio mr-2"> 
                             <span class="font-bold">E-7</span>
                         </label>
                     </div>
@@ -240,45 +241,45 @@
                     <div class="card-header text-slate-800"><i class="fa-solid fa-list-check text-indigo-500 mr-2"></i> <span data-i18n="s1_req">민원 종류 (신청/신고)</span></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 auto-rows-fr">
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_alien_reg" class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_alien_reg" class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-slate-700 block" data-i18n="req_1">외국인 등록</span>
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_alien_reg')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_alien_reg')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-blue-400 bg-blue-50 ring-1 ring-blue-400 shadow-sm h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_extension" checked class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_extension" checked class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-blue-800 block" data-i18n="req_2">체류기간 연장허가</span>
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_extension')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_extension')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_change_work" class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_change_work" class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-slate-700 block" data-i18n="req_3">근무처 변경/추가</span>
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_change_work')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_change_work')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_reentry" class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_reentry" class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-slate-700 block" data-i18n="req_4">재입국허가</span>
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_reentry')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_reentry')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_reissue" class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_reissue" class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-slate-700 block" data-i18n="req_5">등록증 재발급</span>
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_reissue')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_reissue')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center px-4 py-2 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
-                            <input type="radio" name="reqType" value="chk_change_status" class="custom-radio mr-3" onchange="handleModeChange()"> 
+                            <input type="radio" name="reqType" value="chk_change_status" class="custom-radio mr-3" onchange="window.handleModeChange()"> 
                             <span class="font-bold text-slate-700 whitespace-nowrap mr-3 block" data-i18n="req_6">체류자격 변경</span>
                             <input type="text" id="val_change_status" class="input-field !py-2 !px-3 text-xs uppercase flex-1 min-w-0" placeholder="예: E-7-4" onclick="document.querySelector('input[value=\'chk_change_status\']').click();">
-                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_change_status')" title="필요 서류 보기">
+                            <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="window.showDocInfo(event, 'chk_change_status')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
@@ -331,11 +332,11 @@
                     <div class="flex gap-2">
                         <label class="cursor-pointer text-emerald-600 hover:text-white bg-emerald-50 hover:bg-emerald-600 border border-emerald-200 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
                             <i class="fa-solid fa-camera mr-1.5"></i> <span data-i18n="btn_camera">사진 촬영</span>
-                            <input type="file" accept="image/*" capture="environment" class="hidden" onchange="runIDOCR(this)">
+                            <input type="file" accept="image/*" capture="environment" class="hidden" onchange="window.runIDOCR(this)">
                         </label>
                         <label class="cursor-pointer text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 border border-blue-200 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
                             <i class="fa-solid fa-image mr-1.5"></i> <span data-i18n="btn_gallery">파일 첨부</span>
-                            <input type="file" accept="image/*, application/pdf" class="hidden" onchange="runIDOCR(this)">
+                            <input type="file" accept="image/*, application/pdf" class="hidden" onchange="window.runIDOCR(this)">
                         </label>
                     </div>
                 </div>
@@ -395,15 +396,15 @@
                     
                     <div class="flex flex-wrap gap-4 mb-4">
                         <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="submitter" value="self" checked onchange="handleModeChange()" class="custom-radio mr-2"> 
+                            <input type="radio" name="submitter" value="self" checked onchange="window.handleModeChange()" class="custom-radio mr-2"> 
                             <span class="text-sm font-bold" data-i18n="sub_self">본인 직접 제출</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="submitter" value="spouse" onchange="handleModeChange()" class="custom-radio mr-2"> 
+                            <input type="radio" name="submitter" value="spouse" onchange="window.handleModeChange()" class="custom-radio mr-2"> 
                             <span class="text-sm font-bold text-slate-600" data-i18n="sub_spouse">배우자 (대리)</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="submitter" value="parents" onchange="handleModeChange()" class="custom-radio mr-2"> 
+                            <input type="radio" name="submitter" value="parents" onchange="window.handleModeChange()" class="custom-radio mr-2"> 
                             <span class="text-sm font-bold text-slate-600" data-i18n="sub_parents">부/모 (대리)</span>
                         </label>
                     </div>
@@ -422,7 +423,7 @@
                 
                 <div class="mt-6 flex gap-3">
                     <button onclick="prevStep(1)" class="w-1/3 bg-white border-2 border-slate-200 font-bold py-3.5 rounded-xl text-slate-600 hover:bg-slate-50 transition" data-i18n="btn_prev">이전</button>
-                    <button onclick="saveToEmployeeDB(); nextStep(3);" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition" data-i18n="btn_next">다음 단계</button>
+                    <button onclick="window.saveToEmployeeDB(); nextStep(3);" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition" data-i18n="btn_next">다음 단계</button>
                 </div>
             </div>
 
@@ -470,7 +471,7 @@
                 
                 <div class="mt-8 flex gap-3">
                     <button onclick="prevStep(2)" class="w-1/3 bg-white border-2 border-slate-200 font-bold py-3.5 rounded-xl text-slate-600 hover:bg-slate-50 transition" data-i18n="btn_prev">이전</button>
-                    <button onclick="saveToEmployeeDB(); nextStep(4);" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition" data-i18n="btn_next">다음 단계</button>
+                    <button onclick="window.saveToEmployeeDB(); nextStep(4);" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition" data-i18n="btn_next">다음 단계</button>
                 </div>
             </div>
 
@@ -614,7 +615,7 @@
                 
                 <div class="mt-8 flex gap-3">
                     <button onclick="prevStep(3)" class="w-1/3 bg-white border-2 border-slate-200 font-bold py-3.5 rounded-xl text-slate-600 hover:bg-slate-50 transition" data-i18n="btn_prev">이전</button>
-                    <button onclick="saveToEmployeeDB(); nextStep(5);" class="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center transition text-base">
+                    <button onclick="window.saveToEmployeeDB(); nextStep(5);" class="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center transition text-base">
                         <i class="fa-solid fa-robot text-yellow-400 mr-2"></i> <span data-i18n="btn_to_ai">AI 검증 단계로</span>
                     </button>
                 </div>
@@ -643,18 +644,18 @@
                             <label class="flex flex-col items-center justify-center bg-white/10 hover:bg-white/20 border-2 border-indigo-400/50 border-dashed rounded-2xl py-6 cursor-pointer transition-all">
                                 <i class="fa-solid fa-camera text-3xl mb-2 text-indigo-300"></i>
                                 <span class="text-sm font-bold text-white" data-i18n="s5_btn_camera">문서 직접 촬영</span>
-                                <input type="file" accept="image/*" capture="environment" class="hidden" onchange="previewFiles(this)">
+                                <input type="file" accept="image/*" capture="environment" class="hidden" onchange="window.previewFiles(this)">
                             </label>
                             <label class="flex flex-col items-center justify-center bg-white/10 hover:bg-white/20 border-2 border-indigo-400/50 border-dashed rounded-2xl py-6 cursor-pointer transition-all">
                                 <i class="fa-solid fa-images text-3xl mb-2 text-indigo-300"></i>
                                 <span class="text-sm font-bold text-white" data-i18n="s5_btn_gallery">갤러리 / PDF</span>
-                                <input type="file" multiple accept="image/*, application/pdf" class="hidden" onchange="previewFiles(this)">
+                                <input type="file" multiple accept="image/*, application/pdf" class="hidden" onchange="window.previewFiles(this)">
                             </label>
                         </div>
                         
                         <div class="flex justify-between items-center mt-4">
                             <span class="text-sm font-bold text-indigo-200">첨부된 증빙 서류</span>
-                            <button onclick="clearPreviewFiles()" class="text-xs text-rose-300 hover:text-rose-400 bg-rose-500/20 hover:bg-rose-500/40 px-2 py-1 rounded transition">
+                            <button onclick="window.clearPreviewFiles()" class="text-xs text-rose-300 hover:text-rose-400 bg-rose-500/20 hover:bg-rose-500/40 px-2 py-1 rounded transition">
                                 <i class="fa-solid fa-trash-can mr-1"></i>전체 삭제
                             </button>
                         </div>
@@ -665,7 +666,7 @@
                 <div id="ai-result-box" class="hidden rounded-2xl p-5 mb-6 text-sm transition-all shadow-md"></div>
                 
                 <div class="flex flex-col gap-3">
-                    <button id="btn-run-ai" onclick="runAIVerification()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg flex justify-center items-center">
+                    <button id="btn-run-ai" onclick="window.runAIVerification()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg flex justify-center items-center">
                         <i class="fa-solid fa-magnifying-glass-chart mr-2"></i> <span id="btn_verify_text" data-i18n="btn_verify">서류 교차 검증 시작</span>
                     </button>
                     <div class="flex gap-3 mt-2">
@@ -675,7 +676,7 @@
                         <button onclick="editInfo()" class="w-1/4 bg-rose-50 border-2 border-rose-200 text-rose-600 hover:bg-rose-100 font-bold py-3.5 rounded-xl transition flex items-center justify-center text-sm sm:text-base">
                             <i class="fa-solid fa-pen sm:mr-1"></i><span class="hidden sm:inline" data-i18n="btn_edit">입력 수정</span>
                         </button>
-                        <button onclick="prepareGenerate()" class="w-2/4 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl shadow flex items-center justify-center transition text-sm sm:text-base">
+                        <button onclick="window.prepareGenerate()" class="w-2/4 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl shadow flex items-center justify-center transition text-sm sm:text-base">
                             <span data-i18n="btn_skip">건너뛰고 서류 생성</span> <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
                         </button>
                     </div>
@@ -693,15 +694,15 @@
                     <div class="card-header text-slate-800"><i class="fa-solid fa-copy text-blue-500 mr-2"></i><span data-i18n="s6_sub1">생성할 문서 선택</span></div>
                     <div class="space-y-4 text-sm">
                         <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-blue-50 has-[:checked]:border-blue-300">
-                            <input type="checkbox" id="gen_main" class="w-5 h-5 custom-radio mr-3" onchange="saveFormData()"> 
+                            <input type="checkbox" id="gen_main" class="w-5 h-5 custom-radio mr-3" onchange="window.saveFormData()"> 
                             <span class="font-bold text-slate-800" data-i18n="doc_1">통합신청서 (별지 제34호)</span>
                         </label>
                         <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-300">
-                            <input type="checkbox" id="gen_residence" class="w-5 h-5 custom-radio mr-3 !accent-emerald-600" onchange="saveFormData()"> 
+                            <input type="checkbox" id="gen_residence" class="w-5 h-5 custom-radio mr-3 !accent-emerald-600" onchange="window.saveFormData()"> 
                             <span class="font-bold text-slate-800" data-i18n="doc_2">거주/숙소제공 확인서</span>
                         </label>
                         <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300">
-                            <input type="checkbox" id="gen_guarantee" class="w-5 h-5 custom-radio mr-3 !accent-indigo-600" onchange="saveFormData()"> 
+                            <input type="checkbox" id="gen_guarantee" class="w-5 h-5 custom-radio mr-3 !accent-indigo-600" onchange="window.saveFormData()"> 
                             <span class="font-bold text-slate-800" data-i18n="doc_3">신원보증서 (별지 제129호)</span>
                         </label>
                     </div>
@@ -710,11 +711,11 @@
                 <div class="mt-8 flex flex-col gap-3">
                     <div class="flex gap-3">
                         <button onclick="prevStep(5)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-4 rounded-xl transition text-base" data-i18n="btn_prev">이전</button>
-                        <button id="btn-generate-all" onclick="generateSelectedPDFs()" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base flex justify-center items-center">
+                        <button id="btn-generate-all" onclick="window.generateSelectedPDFs()" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base flex justify-center items-center">
                             <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> <span data-i18n="btn_generate">선택된 서류 일괄 생성</span>
                         </button>
                     </div>
-                    <button onclick="renderChecklist(); nextStep(7);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base" data-i18n="btn_to_step7">다음 단계 (최종 제출 점검)</button>
+                    <button onclick="window.renderChecklist(); nextStep(7);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base" data-i18n="btn_to_step7">다음 단계 (최종 제출 점검)</button>
                 </div>
                 
                 <div id="download-zone" class="hidden w-full flex flex-col gap-3 mt-6"></div>
@@ -756,7 +757,7 @@
             <p class="text-xs text-slate-500 mb-4 bg-slate-50 p-2 rounded border border-slate-100">
                 <i class="fa-solid fa-lock text-emerald-500 mr-1"></i> 데이터가 클라우드(Firestore)에 안전하게 암호화되어 저장됩니다.
             </p>
-            <input type="text" id="db-search" oninput="renderDBList()" class="input-field mb-4" placeholder="이름 검색">
+            <input type="text" id="db-search" oninput="window.renderDBList()" class="input-field mb-4" placeholder="이름 검색">
             <div class="flex-1 overflow-y-auto mb-4 border rounded-xl">
                 <ul id="db-list" class="divide-y divide-slate-100"></ul>
             </div>
@@ -770,13 +771,13 @@
             <h3 class="text-xl font-bold text-slate-800 mb-2" data-i18n="home_excel">관리자 신청(다수 접수)</h3>
             <p class="text-xs text-slate-500 mb-6">엑셀 템플릿의 칸을 클릭하면 항목을 선택할 수 있습니다.<br>명단을 입력한 뒤 업로드하면 수십 장의 PDF가 ZIP으로 생성됩니다.</p>
             
-            <button onclick="downloadExcelTemplate()" class="w-full py-3 bg-slate-100 text-slate-700 rounded-xl font-bold mb-3 hover:bg-slate-200 transition text-sm">
+            <button onclick="window.downloadExcelTemplate()" class="w-full py-3 bg-slate-100 text-slate-700 rounded-xl font-bold mb-3 hover:bg-slate-200 transition text-sm">
                 <i class="fa-solid fa-download mr-1"></i> <span data-i18n="btn_excel_down">표준 템플릿 다운로드</span>
             </button>
             
             <label class="block w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition cursor-pointer shadow-md text-sm">
                 <i class="fa-solid fa-upload mr-1"></i> <span data-i18n="btn_excel_up">작성된 엑셀 업로드 (생성 시작)</span>
-                <input type="file" accept=".xlsx, .xls" class="hidden" onchange="processExcelBatch(this)">
+                <input type="file" accept=".xlsx, .xls" class="hidden" onchange="window.processExcelBatch(this)">
             </label>
             <div id="step-excel-progress" class="hidden mt-4 text-xs font-bold text-emerald-600 animate-pulse" data-i18n="msg_excel_prog">수십 명의 PDF를 압축 생성 중입니다...</div>
             <button onclick="closeExcelModal()" class="mt-4 text-slate-400 text-xs underline">닫기</button>
@@ -798,7 +799,7 @@
                         <div class="font-bold text-sm text-slate-800" data-i18n="doc_1">통합신청서 (별지 제34호)</div>
                         <div id="status-main" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
-                    <input type="file" id="file-main" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('main', this)">
+                    <input type="file" id="file-main" class="hidden" accept="application/pdf" onchange="window.uploadSpecificTemplate('main', this)">
                     <label for="file-main" class="bg-white border-2 border-blue-600 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer hover:bg-blue-50">등록</label>
                 </div>
                 <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
@@ -806,7 +807,7 @@
                         <div class="font-bold text-sm text-slate-800" data-i18n="doc_2">거주/숙소제공 확인서</div>
                         <div id="status-residence" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
-                    <input type="file" id="file-residence" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('residence', this)">
+                    <input type="file" id="file-residence" class="hidden" accept="application/pdf" onchange="window.uploadSpecificTemplate('residence', this)">
                     <label for="file-residence" class="bg-white border-2 border-emerald-600 text-emerald-600 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer hover:bg-emerald-50">등록</label>
                 </div>
                 <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
@@ -814,7 +815,7 @@
                         <div class="font-bold text-sm text-slate-800" data-i18n="doc_3">신원보증서 (별지 제129호)</div>
                         <div id="status-guarantee" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
-                    <input type="file" id="file-guarantee" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('guarantee', this)">
+                    <input type="file" id="file-guarantee" class="hidden" accept="application/pdf" onchange="window.uploadSpecificTemplate('guarantee', this)">
                     <label for="file-guarantee" class="bg-white border-2 border-indigo-600 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer hover:bg-indigo-50">등록</label>
                 </div>
             </div>
@@ -841,8 +842,8 @@
             <h3 id="confirm-title" class="text-xl font-extrabold mb-2 text-slate-800">확인</h3>
             <p id="confirm-desc" class="text-sm text-slate-500 mb-6 whitespace-pre-wrap"></p>
             <div class="flex gap-3">
-                <button onclick="closeConfirm()" class="w-1/2 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200">취소</button>
-                <button id="confirm-ok-btn" onclick="executeConfirm()" class="w-1/2 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">확인</button>
+                <button onclick="window.closeConfirm()" class="w-1/2 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200">취소</button>
+                <button id="confirm-ok-btn" onclick="window.confirmOk()" class="w-1/2 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">확인</button>
             </div>
         </div>
     </div>
@@ -854,10 +855,10 @@
                 <h3 class="text-lg font-bold text-slate-800 flex items-center">
                     <i class="fa-solid fa-folder-open text-blue-600 mr-2"></i>민원별 필요 서류 안내
                 </h3>
-                <button onclick="closeDocInfo()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button onclick="window.closeDocInfo()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="doc-info-content" class="flex-1 overflow-y-auto pr-1 space-y-2"></div>
-            <button onclick="closeDocInfo()" class="mt-5 w-full py-3.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">확인했습니다</button>
+            <button onclick="window.closeDocInfo()" class="mt-5 w-full py-3.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">확인했습니다</button>
         </div>
     </div>
 
@@ -871,7 +872,7 @@
             return keyMaterial;
         }
 
-        async function encryptData(text) {
+        window.encryptData = async function(text) {
             if (!text) return "";
             try {
                 const key = await getCryptoKey(SECRET_SALT);
@@ -886,7 +887,7 @@
             } catch(e) { return text; }
         }
 
-        async function decryptData(base64Cipher) {
+        window.decryptData = async function(base64Cipher) {
             if (!base64Cipher || !base64Cipher.startsWith) return base64Cipher;
             try {
                 const binaryStr = atob(base64Cipher);
@@ -902,10 +903,10 @@
             } catch(e) { return base64Cipher; } 
         }
 
-        const apiKey = "AQ.Ab8RN6KCILCKQYf1mqY27b22HzVpjHDDvKeOL1fcAblbQPw3dA";
-        let isBatchMode = false;
-        let currentLang = 'kr';
-        let uploadedImagesBase64 = []; 
+        window.apiKey = "AQ.Ab8RN6KCILCKQYf1mqY27b22HzVpjHDDvKeOL1fcAblbQPw3dA";
+        window.isBatchMode = false;
+        window.currentLang = 'kr';
+        window.uploadedImagesBase64 = []; 
 
         document.addEventListener("DOMContentLoaded", function() {
             flatpickr(".datepicker-input", {
@@ -914,12 +915,12 @@
                 allowInput: true,          
                 disableMobile: "true"      
             });
-            loadFormData(); 
-            updateTemplateStatusUI(); 
-            handleModeChange(); 
+            window.loadFormData(); 
+            window.updateTemplateStatusUI(); 
+            window.handleModeChange(); 
         });
 
-        function requestFullScreenMode() {
+        window.requestFullScreenMode = function() {
             try {
                 const doc = window.document;
                 const docEl = doc.documentElement;
@@ -940,7 +941,7 @@
             }
         }
 
-        async function fetchWithBackoff(url, payload) {
+        window.fetchWithBackoff = async function(url, payload) {
             const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < delays.length + 1; i++) {
                 try {
@@ -1090,7 +1091,6 @@
                 'badge_personal': '개인 준비(작성)'
             },
             'en': {
-                'header_title': 'HDH Samho VISA Support', 
                 'btn_db': 'Cloud DB', 
                 'btn_settings': 'Settings',
                 'home_title': 'Integrated Visa Support System', 
@@ -1220,7 +1220,6 @@
                 'badge_personal': 'Personal Prep'
             },
             'vn': {
-                'header_title': 'Hỗ trợ Visa HDH Samho', 
                 'btn_db': 'Hồ sơ Đám mây', 
                 'btn_settings': 'Cài đặt',
                 'home_title': 'Hệ thống hỗ trợ Visa tích hợp', 
@@ -1351,8 +1350,8 @@
             }
         };
 
-        function changeLanguage(lang) {
-            currentLang = lang;
+        window.changeLanguage = function(lang) {
+            window.currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (i18nDict[lang] && i18nDict[lang][key]) {
@@ -1360,7 +1359,7 @@
                 }
             });
             
-            if (isBatchMode) {
+            if (window.isBatchMode) {
                 document.getElementById('btn-next-step1').innerHTML = i18nDict[lang]['btn_to_excel'];
             } else {
                 document.getElementById('btn-next-step1').innerHTML = i18nDict[lang]['btn_next_step'];
@@ -1381,25 +1380,25 @@
             document.querySelectorAll('.badge-personal').forEach(el => el.innerHTML = i18nDict[lang]['badge_personal']);
         }
 
-        function startSingleProcess() { 
-            requestFullScreenMode(); 
-            isBatchMode = false; 
-            document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_next_step']; 
-            nextStep(1); 
+        window.startSingleProcess = function() { 
+            window.requestFullScreenMode(); 
+            window.isBatchMode = false; 
+            document.getElementById('btn-next-step1').innerHTML = i18nDict[window.currentLang]['btn_next_step']; 
+            window.nextStep(1); 
         }
         
-        function startBatchProcess() { 
-            requestFullScreenMode(); 
-            isBatchMode = true; 
-            document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_to_excel']; 
-            nextStep(1); 
+        window.startBatchProcess = function() { 
+            window.requestFullScreenMode(); 
+            window.isBatchMode = true; 
+            document.getElementById('btn-next-step1').innerHTML = i18nDict[window.currentLang]['btn_to_excel']; 
+            window.nextStep(1); 
         }
         
-        function proceedFromStep1() { 
-            if (isBatchMode) {
-                nextStep('excel'); 
+        window.proceedFromStep1 = function() { 
+            if (window.isBatchMode) {
+                window.nextStep('excel'); 
             } else {
-                nextStep(2); 
+                window.nextStep(2); 
             }
         }
 
@@ -1407,17 +1406,17 @@
         document.addEventListener('input', (e) => { 
             if (e.target.type !== 'file') { 
                 clearTimeout(autoSaveTimer); 
-                autoSaveTimer = setTimeout(saveFormData, 500); 
+                autoSaveTimer = setTimeout(window.saveFormData, 500); 
             }
         });
         
         document.addEventListener('change', (e) => { 
             if (e.target.type !== 'file') {
-                saveFormData(); 
+                window.saveFormData(); 
             }
         });
 
-        function saveFormData() {
+        window.saveFormData = function() {
             const data = {};
             document.querySelectorAll('input, select').forEach(el => {
                 if (el.type === 'file') return;
@@ -1438,7 +1437,7 @@
             } catch(e) {}
         }
         
-        function loadFormData() {
+        window.loadFormData = function() {
             try {
                 const saved = localStorage.getItem('visaAutoSave');
                 if (saved) {
@@ -1458,7 +1457,7 @@
             } catch(e) {}
         }
 
-        function handleModeChange() {
+        window.handleModeChange = function() {
             const visa = document.querySelector('input[name="visaType"]:checked')?.value;
             const req = document.querySelector('input[name="reqType"]:checked')?.value;
             const submitter = document.querySelector('input[name="submitter"]:checked')?.value || 'self';
@@ -1510,7 +1509,7 @@
                 if(document.getElementById('wrap_parents')) document.getElementById('wrap_parents').classList.remove('hidden'); 
             }
             
-            autoSuggestDocs();
+            window.autoSuggestDocs();
         }
 
         let confirmAction = null;
@@ -1525,8 +1524,8 @@
             document.getElementById('confirm-modal').classList.remove('active'); 
             confirmAction = null; 
         }
-        
-        window.executeConfirm = function() {
+
+        window.confirmOk = function() {
             if (confirmAction) confirmAction();
             window.closeConfirm();
         }
@@ -1546,30 +1545,30 @@
             document.getElementById('msg-modal').classList.add('active');
         }
         
-        function closeMsg() { 
+        window.closeMsg = function() { 
             document.getElementById('msg-modal').classList.remove('active'); 
         }
         
-        function openAdminModal() { 
+        window.openAdminModal = function() { 
             document.getElementById('admin-modal').classList.add('active'); 
-            updateTemplateStatusUI(); 
+            window.updateTemplateStatusUI(); 
         }
         
-        function closeAdminModal() { 
+        window.closeAdminModal = function() { 
             document.getElementById('admin-modal').classList.remove('active'); 
         }
         
-        function closeExcelModal() {
+        window.closeExcelModal = function() {
             document.getElementById('excel-modal').classList.remove('active');
         }
 
-        function goHome() { 
-            showConfirm('홈 화면 이동', '현재 작성 중인 내용은 자동 임시저장됩니다.\n첫 화면으로 돌아가시겠습니까?', () => { 
-                nextStep(0); 
+        window.goHome = function() { 
+            window.showConfirm('홈 화면 이동', '현재 작성 중인 내용은 자동 임시저장됩니다.\n첫 화면으로 돌아가시겠습니까?', () => { 
+                window.nextStep(0); 
             }); 
         }
 
-        function nextStep(step) {
+        window.nextStep = function(step) {
             document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
             document.getElementById(`step-${step}`).classList.add('active');
             
@@ -1598,7 +1597,7 @@
                 }
                 
                 const line = document.getElementById('stepper-progress-line');
-                if (isBatchMode) {
+                if (window.isBatchMode) {
                     if (line) line.style.width = stepNum === 1 ? '0%' : '100%';
                     for (let i = 3; i <= 7; i++) {
                         const btn = document.getElementById(`stepper-btn-${i}`);
@@ -1615,27 +1614,27 @@
             window.scrollTo(0,0);
         }
         
-        function navigateStep(targetStep) {
-            if (isBatchMode && targetStep > 2) return;
-            if (isBatchMode && targetStep === 2) {
-                nextStep('excel');
+        window.navigateStep = function(targetStep) {
+            if (window.isBatchMode && targetStep > 2) return;
+            if (window.isBatchMode && targetStep === 2) {
+                window.nextStep('excel');
             } else {
-                nextStep(targetStep);
+                window.nextStep(targetStep);
             }
         }
         
-        function prevStep(step) { 
-            nextStep(step); 
+        window.prevStep = function(step) { 
+            window.nextStep(step); 
         }
 
-        function editInfo() {
+        window.editInfo = function() {
             const firstError = document.querySelector('.error-highlight');
             if (firstError) {
                 const stepContainer = firstError.closest('.step-container');
                 if (stepContainer && stepContainer.id) {
                     const stepNum = parseInt(stepContainer.id.replace('step-', ''), 10);
                     if (!isNaN(stepNum)) {
-                        nextStep(stepNum);
+                        window.nextStep(stepNum);
                         setTimeout(() => {
                             firstError.focus();
                             firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1644,7 +1643,7 @@
                     }
                 }
             }
-            nextStep(2);
+            window.nextStep(2);
         }
 
         const docMatrix = {
@@ -1736,41 +1735,41 @@
             'chk_change_status': '체류자격 변경'
         };
 
-        function showDocInfo(e, reqType) {
+        window.showDocInfo = function(e, reqType) {
             e.preventDefault();
             e.stopPropagation(); 
             
             const visa = document.querySelector('input[name="visaType"]:checked').value;
             const docList = docMatrix[visa]?.[reqType] || docMatrix[visa]?.['default'];
             
-            let html = `<div class="mb-5 text-sm font-extrabold text-white bg-slate-800 p-4 rounded-xl shadow-lg border border-slate-900 flex justify-between items-center">
-                <div><span class="text-yellow-400 mr-1.5">[${visa}]</span> ${reqNames[reqType]} 필수 서류</div>
-                <div class="text-[10px] text-slate-800 bg-yellow-400 px-2.5 py-1.5 rounded-lg shadow-sm border border-yellow-500 animate-pulse"><i class="fa-solid fa-hand-pointer mr-1"></i>터치 번역</div>
+            let html = `<div class="mb-6 text-sm md:text-base font-extrabold text-white bg-slate-800 p-4 rounded-xl shadow-lg border border-slate-900 flex justify-center items-center text-center break-keep">
+                <span><span class="text-yellow-400 mr-1.5">[${visa}]</span> ${reqNames[reqType]} 필수 서류</span>
             </div>`;
             
-            html += `<div class="space-y-2.5">`;
+            html += `<div class="space-y-3">`;
             docList.forEach(doc => {
                 let badge = '';
                 let borderClass = '';
                 
+                const badgeBaseClass = "text-[11px] md:text-xs px-2.5 py-1.5 rounded-lg font-bold whitespace-nowrap shadow-sm inline-block";
+                
                 if (doc.type === 'auto') {
-                    badge = `<span class="badge-auto text-[10px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_auto']}</span>`;
+                    badge = `<span class="badge-auto bg-blue-100 text-blue-700 border border-blue-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_auto']}</span>`;
                     borderClass = 'border-blue-200 bg-blue-50/50';
                 } else if (doc.type === 'company') {
-                    badge = `<span class="badge-company text-[10px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_company']}</span>`;
+                    badge = `<span class="badge-company bg-emerald-100 text-emerald-700 border border-emerald-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_company']}</span>`;
                     borderClass = 'border-emerald-200 bg-emerald-50/30';
                 } else {
-                    badge = `<span class="badge-personal text-[10px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_personal']}</span>`;
+                    badge = `<span class="badge-personal bg-amber-100 text-amber-700 border border-amber-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_personal']}</span>`;
                     borderClass = 'border-amber-200 bg-amber-50/30';
                 }
                 
-                html += `<div class="flex items-center justify-between p-3 rounded-xl border ${borderClass}">
-                    <span class="text-sm font-bold text-slate-700 pr-3 leading-snug cursor-pointer transition-colors duration-200 hover:text-blue-600 select-none flex-1 doc-name-label" 
-                          data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}" 
-                          onclick="toggleDocTranslation(this)">
-                        ${doc.name[currentLang] || doc.name.kr}
-                    </span>
-                    <div class="shrink-0">${badge}</div>
+                html += `<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border ${borderClass}">
+                    <div class="text-sm md:text-base font-bold text-slate-700 leading-snug break-keep flex-1 doc-name-label" 
+                          data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}">
+                        ${doc.name[window.currentLang] || doc.name.kr}
+                    </div>
+                    <div class="shrink-0 text-left sm:text-right">${badge}</div>
                 </div>`;
             });
             html += `</div>`;
@@ -1779,35 +1778,11 @@
             document.getElementById('doc-info-modal').classList.add('active');
         }
 
-        function toggleDocTranslation(el) {
-            if (currentLang === 'kr') {
-                el.style.transform = 'scale(0.98)';
-                setTimeout(() => { el.style.transform = 'none'; }, 100);
-                return;
-            }
-
-            const currentText = el.innerText;
-            const krText = el.getAttribute('data-kr');
-            const translatedText = el.getAttribute(`data-${currentLang}`);
-
-            el.style.opacity = '0';
-            setTimeout(() => {
-                if (currentText === krText) {
-                    el.innerText = translatedText;
-                    el.classList.replace('text-slate-700', 'text-blue-600');
-                } else {
-                    el.innerText = krText;
-                    el.classList.replace('text-blue-600', 'text-slate-700');
-                }
-                el.style.opacity = '1';
-            }, 150);
-        }
-
-        function closeDocInfo() {
+        window.closeDocInfo = function() {
             document.getElementById('doc-info-modal').classList.remove('active');
         }
 
-        function uploadSpecificTemplate(docType, inputEl) {
+        window.uploadSpecificTemplate = function(docType, inputEl) {
             if (inputEl.files.length === 0) return;
             const reader = new FileReader();
             
@@ -1819,17 +1794,17 @@
                         'residence': '거주/숙소제공서', 
                         'guarantee': '신원보증서' 
                     };
-                    showMsg('양식 등록 완료', `[${names[docType]}] 양식이 기기에 저장되었습니다.`, 'success');
-                    updateTemplateStatusUI();
+                    window.showMsg('양식 등록 완료', `[${names[docType]}] 양식이 기기에 저장되었습니다.`, 'success');
+                    window.updateTemplateStatusUI();
                 } catch(err) { 
-                    showMsg('저장 오류', '브라우저 보안 설정이나 용량 제한으로 인해 저장이 차단되었습니다.', 'error'); 
+                    window.showMsg('저장 오류', '브라우저 보안 설정이나 용량 제한으로 인해 저장이 차단되었습니다.', 'error'); 
                 }
                 inputEl.value = ''; 
             };
             reader.readAsDataURL(inputEl.files[0]);
         }
         
-        function updateTemplateStatusUI() {
+        window.updateTemplateStatusUI = function() {
             const types = [ {id: 'main'}, {id: 'residence'}, {id: 'guarantee'} ];
             types.forEach(t => {
                 const statusEl = document.getElementById(`status-${t.id}`);
@@ -1849,7 +1824,7 @@
             });
         }
         
-        function base64ToArrayBuffer(base64) {
+        window.base64ToArrayBuffer = function(base64) {
             const binaryString = window.atob(base64); 
             const bytes = new Uint8Array(binaryString.length);
             for (let i = 0; i < binaryString.length; i++) {
@@ -1858,16 +1833,16 @@
             return bytes.buffer;
         }
 
-        function openDBModal() { 
+        window.openDBModal = function() { 
             document.getElementById('db-modal').classList.add('active'); 
             if(window.renderDBList) window.renderDBList(); 
         }
         
-        function closeDBModal() { 
+        window.closeDBModal = function() { 
             document.getElementById('db-modal').classList.remove('active'); 
         }
 
-        async function runIDOCR(inputEl) {
+        window.runIDOCR = async function(inputEl) {
             if (inputEl.files.length === 0) return;
             const file = inputEl.files[0];
             const loadingUI = document.getElementById('ocr-loading');
@@ -1901,9 +1876,9 @@
                     generationConfig: { responseMimeType: "application/json" }
                 };
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${window.apiKey}`;
                 
-                const result = await fetchWithBackoff(apiUrl, payload);
+                const result = await window.fetchWithBackoff(apiUrl, payload);
                 
                 if (result.error) throw new Error(result.error.message);
                 
@@ -1920,12 +1895,12 @@
                     }
                 });
                 
-                saveFormData(); 
-                clearHighlights();
-                showMsg('OCR 자동입력 성공', '신분증에서 정보를 성공적으로 추출했습니다.\n틀린 곳이 없는지 눈으로 한 번 더 확인해주세요.', 'success');
+                window.saveFormData(); 
+                window.clearHighlights();
+                window.showMsg('OCR 자동입력 성공', '신분증에서 정보를 성공적으로 추출했습니다.\n틀린 곳이 없는지 눈으로 한 번 더 확인해주세요.', 'success');
                 
             } catch(e) {
-                showMsg('OCR 실패', '이미지 판독 중 오류가 발생했습니다.\n수동으로 입력해주세요.', 'error');
+                window.showMsg('OCR 실패', '이미지 판독 중 오류가 발생했습니다.\n수동으로 입력해주세요.', 'error');
             } finally {
                 loadingUI.classList.add('hidden'); 
                 loadingUI.classList.remove('flex'); 
@@ -1933,7 +1908,7 @@
             }
         }
 
-        async function downloadExcelTemplate() {
+        window.downloadExcelTemplate = async function() {
             try {
                 const workbook = new ExcelJS.Workbook();
                 const worksheet = workbook.addWorksheet("비자명단");
@@ -2021,15 +1996,15 @@
                 saveAs(new Blob([buffer]), "HD현대삼호_비자일괄처리_템플릿.xlsx");
                 
             } catch (err) {
-                showMsg('템플릿 오류', '템플릿을 생성하는 중 문제가 발생했습니다.', 'error');
+                window.showMsg('템플릿 오류', '템플릿을 생성하는 중 문제가 발생했습니다.', 'error');
             }
         }
 
-        async function processExcelBatch(inputEl) {
+        window.processExcelBatch = async function(inputEl) {
             if (inputEl.files.length === 0) return;
             
             if (!localStorage.getItem('visaPdfTemplate_main') || !localStorage.getItem('visaPdfTemplate_residence') || !localStorage.getItem('visaPdfTemplate_guarantee')) {
-                showMsg('오류', '엑셀 일괄 생성을 위해서는 우측 상단 [설정]에서 3개의 PDF 양식 원본을 모두 등록해야 합니다.', 'error');
+                window.showMsg('오류', '엑셀 일괄 생성을 위해서는 우측 상단 [설정]에서 3개의 PDF 양식 원본을 모두 등록해야 합니다.', 'error');
                 inputEl.value = ''; 
                 return;
             }
@@ -2196,30 +2171,30 @@
                     let needsGuar = (rowVisa === 'E-7' && ['chk_extension', 'chk_change_status'].includes(rowReq));
 
                     if (needsMain) {
-                        const blobMain = await createSingleDoc('main', fontBuffer, mockGetVal, PDFDocument, rgb);
+                        const blobMain = await window.createSingleDoc('main', fontBuffer, mockGetVal, PDFDocument, rgb);
                         zip.file(`${name}_통합신청서.pdf`, blobMain);
                     }
                     if (needsRes) {
-                        const blobRes = await createSingleDoc('residence', fontBuffer, mockGetVal, PDFDocument, rgb);
+                        const blobRes = await window.createSingleDoc('residence', fontBuffer, mockGetVal, PDFDocument, rgb);
                         zip.file(`${name}_거주숙소제공서.pdf`, blobRes);
                     }
                     if (needsGuar) {
-                        const blobGuar = await createSingleDoc('guarantee', fontBuffer, mockGetVal, PDFDocument, rgb);
+                        const blobGuar = await window.createSingleDoc('guarantee', fontBuffer, mockGetVal, PDFDocument, rgb);
                         zip.file(`${name}_신원보증서.pdf`, blobGuar);
                     }
                 }
 
                 const zipBlob = await zip.generateAsync({type:"blob"});
                 saveAs(zipBlob, `HD현대삼호_비자서류_총${rows.length}명.zip`);
-                showMsg('일괄 생성 완료', `총 ${rows.length}명의 서류 생성이 완료되어 ZIP 파일로 다운로드되었습니다.`, 'success');
+                window.showMsg('일괄 생성 완료', `총 ${rows.length}명의 서류 생성이 완료되어 ZIP 파일로 다운로드되었습니다.`, 'success');
 
             } catch(e) {
                 console.error(e); 
-                showMsg('엑셀 처리 오류', e.message || '파일을 해독하는 중 문제가 발생했습니다.', 'error');
+                window.showMsg('엑셀 처리 오류', e.message || '파일을 해독하는 중 문제가 발생했습니다.', 'error');
             } finally {
                 if (prog) prog.classList.add('hidden');
                 inputEl.value = '';
-                closeExcelModal();
+                window.closeExcelModal();
             }
         }
 
@@ -2294,13 +2269,13 @@
             }
         });
 
-        function clearHighlights() {
+        window.clearHighlights = function() {
             document.querySelectorAll('.error-highlight').forEach(el => {
                 el.classList.remove('error-highlight');
             });
         }
 
-        function previewFiles(inputEl) {
+        window.previewFiles = function(inputEl) {
             if (!inputEl || !inputEl.files) return;
             const files = inputEl.files;
             const container = document.getElementById('file-preview-container');
@@ -2309,9 +2284,9 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const fileData = e.target.result;
-                    const fileIndex = uploadedImagesBase64.length;
+                    const fileIndex = window.uploadedImagesBase64.length;
                     
-                    uploadedImagesBase64.push({ mimeType: file.type, data: fileData.split(',')[1] });
+                    window.uploadedImagesBase64.push({ mimeType: file.type, data: fileData.split(',')[1] });
                     
                     const wrapper = document.createElement('div');
                     wrapper.className = 'relative h-16 w-16 flex-shrink-0 group';
@@ -2326,7 +2301,7 @@
                         innerHTML = `<div class="h-16 w-16 flex flex-col items-center justify-center bg-white/10 rounded-xl shadow-sm border border-white/20 text-center overflow-hidden px-1 backdrop-blur-sm"><i class="fa-solid fa-file text-xl mb-1 text-indigo-300"></i><span class="text-[8px] font-bold text-white break-all line-clamp-1">${file.name}</span></div>`;
                     }
                     
-                    innerHTML += `<button onclick="removePreviewFile(${fileIndex})" class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-md opacity-0 group-hover:opacity-100 transition hover:bg-rose-600"><i class="fa-solid fa-xmark"></i></button>`;
+                    innerHTML += `<button onclick="window.removePreviewFile(${fileIndex})" class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-md opacity-0 group-hover:opacity-100 transition hover:bg-rose-600"><i class="fa-solid fa-xmark"></i></button>`;
                     
                     wrapper.innerHTML = innerHTML;
                     container.appendChild(wrapper);
@@ -2337,31 +2312,31 @@
             inputEl.value = '';
         }
 
-        function removePreviewFile(index) {
-            uploadedImagesBase64[index] = null;
+        window.removePreviewFile = function(index) {
+            window.uploadedImagesBase64[index] = null;
             const el = document.getElementById(`preview-file-${index}`);
             if (el) el.remove();
         }
 
-        function clearPreviewFiles() {
-            uploadedImagesBase64 = [];
+        window.clearPreviewFiles = function() {
+            window.uploadedImagesBase64 = [];
             document.getElementById('file-preview-container').innerHTML = '';
         }
 
-        async function runAIVerification() {
-            const validDocs = uploadedImagesBase64.filter(doc => doc !== null);
+        window.runAIVerification = async function() {
+            const validDocs = window.uploadedImagesBase64.filter(doc => doc !== null);
             if (validDocs.length === 0) {
-                return showMsg('안내', '검증할 증빙 서류를 업로드(또는 촬영) 해주세요.', 'info');
+                return window.showMsg('안내', '검증할 증빙 서류를 업로드(또는 촬영) 해주세요.', 'info');
             }
             
             const btn = document.getElementById('btn-run-ai'); 
             const resultBox = document.getElementById('ai-result-box');
             
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${i18nDict[currentLang]['ai_loading']}`; 
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${i18nDict[window.currentLang]['ai_loading']}`; 
             btn.disabled = true; 
             resultBox.classList.add('hidden');
             
-            clearHighlights();
+            window.clearHighlights();
 
             const getVal = (id) => document.getElementById(id)?.value || '';
             const getUpperVal = (id) => getVal(id).toUpperCase();
@@ -2390,7 +2365,7 @@
             };
 
             const langNameMap = { 'kr': '한국어', 'en': 'English', 'vn': 'Tiếng Việt' };
-            const aiLang = langNameMap[currentLang] || '한국어';
+            const aiLang = langNameMap[window.currentLang] || '한국어';
 
             try {
                 const prompt = `당신은 대한민국 법무부 출입국·외국인정책본부의 최고 수준 비자 서류 심사관(Vision AI)입니다.
@@ -2448,9 +2423,9 @@ ${JSON.stringify(formData, null, 2)}
                     }
                 };
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${window.apiKey}`;
                 
-                const result = await fetchWithBackoff(apiUrl, payload);
+                const result = await window.fetchWithBackoff(apiUrl, payload);
                 if (result.error) throw new Error(result.error.message);
                 
                 const aiData = JSON.parse(result.candidates[0].content.parts[0].text);
@@ -2458,10 +2433,10 @@ ${JSON.stringify(formData, null, 2)}
 
                 if (aiData.status === 'PASS' || !aiData.issues?.length) {
                     resultBox.className = 'bg-white text-emerald-800 border-2 border-emerald-400 rounded-2xl p-5 mb-6 text-sm shadow-lg shadow-emerald-500/20';
-                    resultBox.innerHTML = `<div class="font-extrabold text-base mb-2 flex items-center"><i class="fa-solid fa-circle-check text-2xl mr-2 text-emerald-500"></i> ${i18nDict[currentLang]['ai_pass_title']}</div><p class="text-emerald-600 font-medium">${i18nDict[currentLang]['ai_pass_desc']}</p>`;
+                    resultBox.innerHTML = `<div class="font-extrabold text-base mb-2 flex items-center"><i class="fa-solid fa-circle-check text-2xl mr-2 text-emerald-500"></i> ${i18nDict[window.currentLang]['ai_pass_title']}</div><p class="text-emerald-600 font-medium">${i18nDict[window.currentLang]['ai_pass_desc']}</p>`;
                 } else {
                     resultBox.className = 'bg-white text-rose-900 border-2 border-rose-400 rounded-2xl p-5 mb-6 text-sm shadow-lg shadow-rose-500/20';
-                    let html = `<div class="font-extrabold text-base mb-3 flex items-center text-rose-600"><i class="fa-solid fa-triangle-exclamation text-2xl mr-2"></i> ${i18nDict[currentLang]['ai_fail_title']} (${aiData.issues.length}건)</div><div class="space-y-3">`;
+                    let html = `<div class="font-extrabold text-base mb-3 flex items-center text-rose-600"><i class="fa-solid fa-triangle-exclamation text-2xl mr-2"></i> ${i18nDict[window.currentLang]['ai_fail_title']} (${aiData.issues.length}건)</div><div class="space-y-3">`;
                     aiData.issues.forEach(iss => { 
                         html += `
                         <div class="bg-rose-50 p-3 rounded-xl border border-rose-100">
@@ -2476,17 +2451,17 @@ ${JSON.stringify(formData, null, 2)}
                         }
                     });
                     resultBox.innerHTML = html + `</div>`;
-                    showMsg(i18nDict[currentLang]['ai_msg_fail_title'], i18nDict[currentLang]['ai_msg_fail_desc'], 'info');
+                    window.showMsg(i18nDict[window.currentLang]['ai_msg_fail_title'], i18nDict[window.currentLang]['ai_msg_fail_desc'], 'info');
                 }
             } catch (e) { 
-                showMsg(i18nDict[currentLang]['ai_msg_err_title'], i18nDict[currentLang]['ai_msg_err_desc'], 'error'); 
+                window.showMsg(i18nDict[window.currentLang]['ai_msg_err_title'], i18nDict[window.currentLang]['ai_msg_err_desc'], 'error'); 
             } finally { 
-                btn.innerHTML = `<i class="fa-solid fa-rotate-right mr-2"></i> <span id="btn_verify_text">${i18nDict[currentLang]['btn_ai_recheck']}</span>`; 
+                btn.innerHTML = `<i class="fa-solid fa-rotate-right mr-2"></i> <span id="btn_verify_text">${i18nDict[window.currentLang]['btn_ai_recheck']}</span>`; 
                 btn.disabled = false; 
             }
         }
 
-        function autoSuggestDocs() {
+        window.autoSuggestDocs = function() {
             const visa = document.querySelector('input[name="visaType"]:checked')?.value;
             const req = document.querySelector('input[name="reqType"]:checked')?.value;
             
@@ -2502,9 +2477,9 @@ ${JSON.stringify(formData, null, 2)}
             }
         }
         
-        function prepareGenerate() { 
-            autoSuggestDocs(); 
-            nextStep(6); 
+        window.prepareGenerate = function() { 
+            window.autoSuggestDocs(); 
+            window.nextStep(6); 
         }
 
         const PDF_COORDS_MAIN = {
@@ -2630,9 +2605,9 @@ ${JSON.stringify(formData, null, 2)}
             p_sign_name: { type: 'text', x: 356, y: 66, w: 124, h: 20 }
         };
 
-        async function createSingleDoc(docType, fontBuffer, valFn, PDFDocument, rgb) {
+        window.createSingleDoc = async function(docType, fontBuffer, valFn, PDFDocument, rgb) {
             const tplB64 = localStorage.getItem(`visaPdfTemplate_${docType}`);
-            const pdfDoc = await PDFDocument.load(base64ToArrayBuffer(tplB64));
+            const pdfDoc = await PDFDocument.load(window.base64ToArrayBuffer(tplB64));
             
             pdfDoc.registerFontkit(fontkit); 
             const font = await pdfDoc.embedFont(fontBuffer); 
@@ -2880,7 +2855,7 @@ ${JSON.stringify(formData, null, 2)}
             return new Blob([pdfBytes], { type: 'application/pdf' });
         }
 
-        async function generateSelectedPDFs() {
+        window.generateSelectedPDFs = async function() {
             const btn = document.getElementById('btn-generate-all');
             const zone = document.getElementById('download-zone');
             
@@ -2929,7 +2904,7 @@ ${JSON.stringify(formData, null, 2)}
                             headerAdded = true; 
                         }
                         
-                        const blob = await createSingleDoc(t.type, fontBuffer, getValUI, PDFDocument, rgb);
+                        const blob = await window.createSingleDoc(t.type, fontBuffer, getValUI, PDFDocument, rgb);
                         const a = document.createElement('a'); 
                         
                         a.href = URL.createObjectURL(blob); 
@@ -2944,20 +2919,19 @@ ${JSON.stringify(formData, null, 2)}
                 
                 zone.classList.remove('hidden');
                 
-                // 클라우드 함수가 덮어씌워졌다면 클라우드에, 아니면 로컬에 저장
                 if(window.saveToEmployeeDB) {
                     window.saveToEmployeeDB(); 
                 }
 
             } catch(e) { 
-                showMsg('생성 오류', e.message, 'error'); 
+                window.showMsg('생성 오류', e.message, 'error'); 
             } finally { 
-                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> ${i18nDict[currentLang]['btn_generate']}`; 
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> ${i18nDict[window.currentLang]['btn_generate']}`; 
                 btn.disabled = false; 
             }
         }
 
-        function renderChecklist() {
+        window.renderChecklist = function() {
             const visa = document.querySelector('input[name="visaType"]:checked').value;
             const reqType = document.querySelector('input[name="reqType"]:checked').value;
             const docList = docMatrix[visa]?.[reqType] || docMatrix[visa]?.['default'];
@@ -2965,34 +2939,38 @@ ${JSON.stringify(formData, null, 2)}
             const container = document.getElementById('checklist-container');
             let html = '<div class="space-y-3">';
             
+            const badgeBaseClass = "text-[11px] md:text-xs px-2.5 py-1.5 rounded-lg font-bold whitespace-nowrap shadow-sm inline-block";
+
             docList.forEach((doc, idx) => {
                 let badge = '';
                 if (doc.type === 'auto') {
-                    badge = `<span class="badge-auto mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_auto']}</span>`;
+                    badge = `<span class="badge-auto bg-blue-100 text-blue-700 border border-blue-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_auto']}</span>`;
                 } else if (doc.type === 'company') {
-                    badge = `<span class="badge-company mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_company']}</span>`;
+                    badge = `<span class="badge-company bg-emerald-100 text-emerald-700 border border-emerald-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_company']}</span>`;
                 } else {
-                    badge = `<span class="badge-personal mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_personal']}</span>`;
+                    badge = `<span class="badge-personal bg-amber-100 text-amber-700 border border-amber-200 ${badgeBaseClass}">${i18nDict[window.currentLang]['badge_personal']}</span>`;
                 }
                 
-                const docName = doc.name[currentLang] || doc.name.kr;
+                const docName = doc.name[window.currentLang] || doc.name.kr;
                 
                 html += `
-                <label class="flex flex-col sm:flex-row sm:items-center p-4 border border-slate-200 bg-white rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-400 has-[:checked]:ring-1 has-[:checked]:ring-emerald-400">
-                    <div class="flex items-center w-full sm:w-auto">
-                        <input type="checkbox" class="w-6 h-6 custom-radio mr-4 !accent-emerald-600 final-checklist-item" onchange="checkFinalSuccess()"> 
-                        <span class="doc-name-label font-bold text-slate-800 text-sm md:text-base flex-1" data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}">${docName}</span>
+                <label class="flex items-start sm:items-center p-4 border border-slate-200 bg-white rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-400 has-[:checked]:ring-1 has-[:checked]:ring-emerald-400 shadow-sm">
+                    <div class="flex items-center h-full pt-0.5 sm:pt-0 mr-3.5">
+                        <input type="checkbox" class="w-6 h-6 custom-radio !accent-emerald-600 final-checklist-item" onchange="window.checkFinalSuccess()"> 
                     </div>
-                    <div class="ml-10 sm:ml-auto shrink-0">${badge}</div>
+                    <div class="flex flex-col sm:flex-row sm:items-center w-full justify-between gap-3">
+                        <span class="doc-name-label font-bold text-slate-800 text-sm md:text-base leading-snug break-keep pr-2" data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}">${docName}</span>
+                        <div class="shrink-0 text-left sm:text-right">${badge}</div>
+                    </div>
                 </label>`;
             });
             html += '</div>';
             
             container.innerHTML = html;
-            checkFinalSuccess(); 
+            window.checkFinalSuccess(); 
         }
         
-        function checkFinalSuccess() {
+        window.checkFinalSuccess = function() {
             const checkboxes = document.querySelectorAll('.final-checklist-item');
             const allChecked = Array.from(checkboxes).every(cb => cb.checked);
             const msgBox = document.getElementById('final-success-msg');
@@ -3034,7 +3012,6 @@ ${JSON.stringify(formData, null, 2)}
                 if (u) {
                     console.log("🔒 클라우드 연결 및 보안 인증 완료");
 
-                    // 인증이 완료되면 로컬스토리지용 함수를 클라우드 Firestore용 함수로 안전하게 덮어씁니다.
                     window.saveToEmployeeDB = async function() {
                         const arc = document.getElementById('i_arc')?.value; 
                         const surname = document.getElementById('i_surname')?.value;
@@ -3051,9 +3028,9 @@ ${JSON.stringify(formData, null, 2)}
                         });
                         data.lastUpdated = new Date().toISOString().split('T')[0];
 
-                        if (data.i_arc) data.i_arc = await encryptData(data.i_arc);
-                        if (data.i_passport) data.i_passport = await encryptData(data.i_passport);
-                        if (data.i_cellphone) data.i_cellphone = await encryptData(data.i_cellphone);
+                        if (data.i_arc) data.i_arc = await window.encryptData(data.i_arc);
+                        if (data.i_passport) data.i_passport = await window.encryptData(data.i_passport);
+                        if (data.i_cellphone) data.i_cellphone = await window.encryptData(data.i_cellphone);
                         
                         try {
                             const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'employees', arc.replace(/[^a-zA-Z0-9]/g, ''));
@@ -3070,8 +3047,8 @@ ${JSON.stringify(formData, null, 2)}
                         try {
                             const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'employees');
                             const snapshot = await getDocs(colRef);
-                            snapshot.forEach(doc => {
-                                employeeList.push(doc.data());
+                            snapshot.forEach(docSnap => {
+                                employeeList.push(docSnap.data());
                             });
 
                             list.innerHTML = '';
@@ -3082,8 +3059,8 @@ ${JSON.stringify(formData, null, 2)}
 
                             for (let i = 0; i < employeeList.length; i++) {
                                 const emp = employeeList[i];
-                                if (emp.i_arc) emp._decryptedArc = await decryptData(emp.i_arc);
-                                if (emp.i_passport) emp._decryptedPassport = await decryptData(emp.i_passport);
+                                if (emp.i_arc) emp._decryptedArc = await window.decryptData(emp.i_arc);
+                                if (emp.i_passport) emp._decryptedPassport = await window.decryptData(emp.i_passport);
                             }
                             
                             const filtered = employeeList.filter(e => {
@@ -3116,15 +3093,15 @@ ${JSON.stringify(formData, null, 2)}
                             let emp = null;
                             const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'employees');
                             const snapshot = await getDocs(colRef);
-                            snapshot.forEach(doc => {
-                                if (doc.data().i_arc === dbId) emp = doc.data();
+                            snapshot.forEach(docSnap => {
+                                if (docSnap.data().i_arc === dbId) emp = docSnap.data();
                             });
                             
                             if (!emp) return;
                             
-                            if (emp.i_arc) emp.i_arc = await decryptData(emp.i_arc);
-                            if (emp.i_passport) emp.i_passport = await decryptData(emp.i_passport);
-                            if (emp.i_cellphone) emp.i_cellphone = await decryptData(emp.i_cellphone);
+                            if (emp.i_arc) emp.i_arc = await window.decryptData(emp.i_arc);
+                            if (emp.i_passport) emp.i_passport = await window.decryptData(emp.i_passport);
+                            if (emp.i_cellphone) emp.i_cellphone = await window.decryptData(emp.i_cellphone);
                             
                             Object.keys(emp).forEach(key => {
                                 const el = document.getElementById(key);
@@ -3140,13 +3117,13 @@ ${JSON.stringify(formData, null, 2)}
                                 }
                             });
                             
-                            closeDBModal(); 
-                            handleModeChange(); 
-                            saveFormData(); 
-                            clearHighlights();
-                            showMsg('불러오기 완료', `${emp.i_surname} 직원의 정보를 클라우드에서 성공적으로 불러왔습니다.`, 'success');
+                            window.closeDBModal(); 
+                            window.handleModeChange(); 
+                            window.saveFormData(); 
+                            window.clearHighlights();
+                            window.showMsg('불러오기 완료', `${emp.i_surname} 직원의 정보를 클라우드에서 성공적으로 불러왔습니다.`, 'success');
                         } catch (e) {
-                            showMsg('오류', `정보를 불러올 수 없습니다.`, 'error');
+                            window.showMsg('오류', `정보를 불러올 수 없습니다.`, 'error');
                         }
                     };
 
@@ -3156,8 +3133,8 @@ ${JSON.stringify(formData, null, 2)}
                                 const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'employees');
                                 const snapshot = await getDocs(colRef);
                                 let docIdToDelete = null;
-                                snapshot.forEach(doc => {
-                                    if (doc.data().i_arc === dbId) docIdToDelete = doc.id;
+                                snapshot.forEach(docSnap => {
+                                    if (docSnap.data().i_arc === dbId) docIdToDelete = docSnap.id;
                                 });
                                 if (docIdToDelete) {
                                     await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'employees', docIdToDelete));
