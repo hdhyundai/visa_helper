@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- 모바일 앱 라이크(App-like) 메타 태그 추가 -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,16 +10,13 @@
     <meta name="theme-color" content="#0f172a">
     <title>HD현대삼호 비자지원</title>
     
-    <!-- CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Flatpickr (고급 날짜 선택기) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
 
-    <!-- PDF & Excel Utils -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
@@ -607,6 +603,15 @@
                                 <input type="text" id="i_refund_acc" class="w-2/3 px-4 py-3 text-sm outline-none font-mono" placeholder="계좌번호 (하이픈 없이)">
                             </div>
                         </div>
+                        
+                        <div id="wrap_guar_period" class="dynamic-wrap hidden sm:col-span-2 mt-2 border-t border-slate-100 pt-3">
+                            <label class="form-label text-indigo-700" data-i18n="l_guar_date">신원보증 기간 (From - To)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="i_guar_start" class="input-field bg-indigo-50/30 datepicker-input" placeholder="시작일 (예: 2024-05-18)">
+                                <span class="font-bold text-slate-400">~</span>
+                                <input type="text" id="i_guar_end" class="input-field bg-indigo-50/30 datepicker-input" placeholder="종료일 (예: 2026-05-17)">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -712,7 +717,6 @@
                             <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> <span data-i18n="btn_generate">선택된 서류 일괄 생성</span>
                         </button>
                     </div>
-                    <!-- Step 7으로 넘어가는 버튼 추가 -->
                     <button onclick="renderChecklist(); nextStep(7);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base" data-i18n="btn_to_step7">다음 단계 (최종 제출 점검)</button>
                 </div>
                 
@@ -727,8 +731,7 @@
                 </div>
                 
                 <div id="checklist-container" class="card-box bg-slate-50/50">
-                    <!-- 체크리스트 항목이 동적으로 생성됩니다 -->
-                </div>
+                    </div>
 
                 <div id="final-success-msg" class="hidden bg-emerald-50 border-2 border-emerald-500 rounded-3xl p-6 md:p-8 text-center shadow-lg animate-pulse mb-6">
                     <i class="fa-solid fa-circle-check text-5xl text-emerald-500 mb-4"></i>
@@ -745,7 +748,6 @@
         </main>
     </div>
 
-    <!-- 직원 DB 검색 모달 -->
     <div id="db-modal" class="modal z-[160]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-lg shadow-2xl flex flex-col max-h-[80vh]">
             <div class="flex items-center justify-between mb-4">
@@ -759,7 +761,6 @@
         </div>
     </div>
 
-    <!-- 엑셀 대량 처리 모달 -->
     <div id="excel-modal" class="modal z-[160]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-sm shadow-2xl text-center">
             <i class="fa-solid fa-file-excel text-5xl text-emerald-500 mb-4"></i>
@@ -779,7 +780,6 @@
         </div>
     </div>
 
-    <!-- 양식 등록 관리자 모달 -->
     <div id="admin-modal" class="modal z-[150]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-sm shadow-2xl">
             <div class="flex items-center justify-between mb-2">
@@ -791,7 +791,7 @@
             <div class="space-y-3 mb-6">
                 <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div>
-                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_1">통합신청서</div>
+                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_1">통합신청서 (별지 제34호)</div>
                         <div id="status-main" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
                     <input type="file" id="file-main" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('main', this)">
@@ -799,7 +799,7 @@
                 </div>
                 <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div>
-                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_2">거주/숙소제공서</div>
+                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_2">거주/숙소제공 확인서</div>
                         <div id="status-residence" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
                     <input type="file" id="file-residence" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('residence', this)">
@@ -807,7 +807,7 @@
                 </div>
                 <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div>
-                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_3">신원보증서</div>
+                        <div class="font-bold text-sm text-slate-800" data-i18n="doc_3">신원보증서 (별지 제129호)</div>
                         <div id="status-guarantee" class="text-[11px] text-rose-500 font-bold mt-1">미등록</div>
                     </div>
                     <input type="file" id="file-guarantee" class="hidden" accept="application/pdf" onchange="uploadSpecificTemplate('guarantee', this)">
@@ -818,7 +818,6 @@
         </div>
     </div>
 
-    <!-- 알림용 공통 모달 -->
     <div id="msg-modal" class="modal z-[200]">
         <div class="bg-white p-7 rounded-3xl w-10/12 max-w-xs shadow-2xl text-center">
             <div id="msg-icon" class="mb-4"></div>
@@ -828,7 +827,6 @@
         </div>
     </div>
     
-    <!-- 컨펌용 공통 모달 -->
     <div id="confirm-modal" class="modal z-[200]">
         <div class="bg-white p-7 rounded-3xl w-10/12 max-w-xs shadow-2xl text-center">
             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500">
@@ -843,7 +841,6 @@
         </div>
     </div>
 
-    <!-- 필요 서류 안내 모달 -->
     <div id="doc-info-modal" class="modal z-[170]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-md shadow-2xl flex flex-col max-h-[80vh]">
             <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
@@ -853,17 +850,12 @@
                 <button onclick="closeDocInfo()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="doc-info-content" class="flex-1 overflow-y-auto pr-1 space-y-2">
-                <!-- 동적 서류 리스트 삽입 영역 -->
-            </div>
+                </div>
             <button onclick="closeDocInfo()" class="mt-5 w-full py-3.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">확인했습니다</button>
         </div>
     </div>
 
     <script>
-        // 사용자님의 API 키: "AQ.Ab8RN6KCILCKQYf1mqY27b22HzVpjHDDvKeOL1fcAblbQPw3dA"
-        // ⚠️ 현재 미리보기 환경(Canvas)에서는 보안 및 시스템 규칙상 빈 문자열("")로 두어야 자동 동작합니다.
-        // 파일을 다운로드(Export)하여 개인 웹서버나 PC에서 실행하실 때는 아래 주석을 풀고 기존 apiKey를 지워주세요.
-        // const apiKey = "AQ.Ab8RN6KCILCKQYf1mqY27b22HzVpjHDDvKeOL1fcAblbQPw3dA";
         const apiKey = "AQ.Ab8RN6KCILCKQYf1mqY27b22HzVpjHDDvKeOL1fcAblbQPw3dA";
 
         let isBatchMode = false;
@@ -878,7 +870,6 @@
             });
         });
 
-        // 🌟 전체화면(Fullscreen) 전환 함수 (권한 거부 에러 예외 처리)
         function requestFullScreenMode() {
             try {
                 const doc = window.document;
@@ -918,9 +909,6 @@
             }
         }
 
-        // ---------------------------------------------------
-        // 1. 다국어 데이터 (i18n) 설정 (Step 7 번역 추가)
-        // ---------------------------------------------------
         const i18nDict = {
             'kr': {
                 'header_title': 'HD현대삼호 비자지원', 
@@ -1011,6 +999,7 @@
                 'l_income': '연소득 (단위: 만원)', 
                 'l_reentry': '재입국 신청 기간', 
                 'l_refund': '수수료 환급 계좌',
+                'l_guar_date': '신원보증 기간 (From - To)',
                 'btn_to_ai': 'AI 검증 단계로',
                 's5_step': 'Step 5', 
                 's5_title': 'AI 서류 정밀 검증',
@@ -1046,16 +1035,19 @@
                 's7_desc': '해당 민원에 필요한 모든 서류가 준비되었는지 확인해 주세요.',
                 's7_success_title': '모든 서류 준비 완료!',
                 's7_success_desc': '모든 서류가 꼼꼼하게 준비되었습니다.<br>관할 출입국·외국인관서에 방문하시거나 하이코리아(온라인)를 통해 신청을 완료해 주시기 바랍니다.',
-                'btn_home': '처음으로 돌아가기'
+                'btn_home': '처음으로 돌아가기',
+                'badge_auto': '이 시스템 자동생성',
+                'badge_company': '회사 발급',
+                'badge_personal': '개인 준비(작성)'
             },
             'en': {
-                'header_title': 'HD현대삼호 비자지원', 
+                'header_title': 'HDH Samho VISA Support', 
                 'btn_db': 'Employee DB', 
                 'btn_settings': 'Settings',
                 'home_title': 'Integrated Visa Support System', 
                 'home_desc': 'A simple input automatically completes required immigration documents according to the format.', 
-                'home_start': 'Smart Single Application (1 Person)', 
-                'home_excel': 'Batch Processing (Multiple People)',
+                'home_start': 'Single Application', 
+                'home_excel': 'Batch Processing',
                 's1_step': 'Step 1', 
                 's1_title': 'Visa & Request Type', 
                 's1_desc': 'Fields will change dynamically based on your selection.',
@@ -1137,6 +1129,7 @@
                 'l_income': 'Annual Income', 
                 'l_reentry': 'Re-entry Period', 
                 'l_refund': 'Refund Account',
+                'l_guar_date': 'Guarantee Period (From-To)',
                 'btn_to_ai': 'Go to AI Check',
                 's5_step': 'Step 5', 
                 's5_title': 'AI Verification',
@@ -1172,16 +1165,19 @@
                 's7_desc': 'Please confirm all required documents are ready.',
                 's7_success_title': 'All Documents Ready!',
                 's7_success_desc': 'All documents are perfectly prepared.<br>Please visit the immigration office or apply online via HiKorea.',
-                'btn_home': 'Go to Home'
+                'btn_home': 'Go to Home',
+                'badge_auto': 'System Auto-generated',
+                'badge_company': 'Company Provided',
+                'badge_personal': 'Personal Prep'
             },
             'vn': {
-                'header_title': 'HD현대삼호 비자지원', 
+                'header_title': 'Hỗ trợ Visa HDH Samho', 
                 'btn_db': 'Hồ sơ NV', 
                 'btn_settings': 'Cài đặt',
                 'home_title': 'Hệ thống hỗ trợ Visa tích hợp', 
                 'home_desc': 'Thông tin đơn giản sẽ tự động điền các tài liệu cần thiết.', 
-                'home_start': 'Tạo đơn cá nhân (1 Người)', 
-                'home_excel': 'Xử lý hàng loạt (Nhiều người)',
+                'home_start': 'Tạo đơn cá nhân', 
+                'home_excel': 'Xử lý hàng loạt',
                 's1_step': 'Bước 1', 
                 's1_title': 'Loại Visa & Yêu cầu', 
                 's1_desc': 'Các trường sẽ thay đổi dựa trên lựa chọn của bạn.',
@@ -1263,6 +1259,7 @@
                 'l_income': 'Thu nhập năm', 
                 'l_reentry': 'Thời gian tái nhập cảnh', 
                 'l_refund': 'Tài khoản hoàn tiền',
+                'l_guar_date': 'Thời gian bảo lãnh (Từ - Đến)',
                 'btn_to_ai': 'Đến bước kiểm tra AI',
                 's5_step': 'Bước 5', 
                 's5_title': 'Xác minh AI',
@@ -1298,7 +1295,10 @@
                 's7_desc': 'Vui lòng xác nhận tất cả tài liệu đã sẵn sàng.',
                 's7_success_title': 'Tất cả tài liệu đã sẵn sàng!',
                 's7_success_desc': 'Tất cả tài liệu đã được chuẩn bị đầy đủ.<br>Vui lòng đến văn phòng xuất nhập cảnh hoặc nộp trực tuyến qua HiKorea.',
-                'btn_home': 'Về trang chủ'
+                'btn_home': 'Về trang chủ',
+                'badge_auto': 'Hệ thống tự động tạo',
+                'badge_company': 'Công ty cấp',
+                'badge_personal': 'Cá nhân chuẩn bị'
             }
         };
 
@@ -1321,17 +1321,28 @@
             if (aiBtn) {
                 aiBtn.innerHTML = i18nDict[currentLang]['btn_verify'];
             }
+
+            // 동적 생성된 체크리스트 문서 이름 업데이트 (체크 상태 유지 목적)
+            document.querySelectorAll('.doc-name-label').forEach(el => {
+                const newName = el.getAttribute(`data-${lang}`);
+                if (newName) el.innerHTML = newName;
+            });
+
+            // 동적 생성된 배지 텍스트 업데이트
+            document.querySelectorAll('.badge-auto').forEach(el => el.innerHTML = i18nDict[lang]['badge_auto']);
+            document.querySelectorAll('.badge-company').forEach(el => el.innerHTML = i18nDict[lang]['badge_company']);
+            document.querySelectorAll('.badge-personal').forEach(el => el.innerHTML = i18nDict[lang]['badge_personal']);
         }
 
         function startSingleProcess() { 
-            requestFullScreenMode(); // 시작 시 전체화면 강제 시도
+            requestFullScreenMode(); 
             isBatchMode = false; 
             document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_next_step']; 
             nextStep(1); 
         }
         
         function startBatchProcess() { 
-            requestFullScreenMode(); // 시작 시 전체화면 강제 시도
+            requestFullScreenMode(); 
             isBatchMode = true; 
             document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_to_excel']; 
             nextStep(1); 
@@ -1363,7 +1374,7 @@
             const data = {};
             document.querySelectorAll('input, select').forEach(el => {
                 if (el.type === 'file') return;
-                if (el.classList.contains('final-checklist-item')) return; // 체크리스트 제외
+                if (el.classList.contains('final-checklist-item')) return; 
                 
                 if (el.type === 'radio' || el.type === 'checkbox') { 
                     if (el.name) {
@@ -1407,6 +1418,7 @@
         });
 
         function handleModeChange() {
+            const visa = document.querySelector('input[name="visaType"]:checked')?.value;
             const req = document.querySelector('input[name="reqType"]:checked')?.value;
             const submitter = document.querySelector('input[name="submitter"]:checked')?.value || 'self';
             
@@ -1423,7 +1435,7 @@
                 activeLbl.querySelector('span:first-of-type, div>span').className = 'font-bold text-blue-800 block';
             }
 
-            ['wrap_new_workplace', 'wrap_reentry_period', 'wrap_refund_acc', 'wrap_dorm', 'wrap_family_proxy', 'wrap_spouse', 'wrap_parents'].forEach(id => {
+            ['wrap_new_workplace', 'wrap_reentry_period', 'wrap_refund_acc', 'wrap_dorm', 'wrap_family_proxy', 'wrap_spouse', 'wrap_parents', 'wrap_guar_period'].forEach(id => {
                 const dom = document.getElementById(id); 
                 if(dom) dom.classList.add('hidden');
             });
@@ -1443,6 +1455,10 @@
             if (req === 'chk_extension' || req === 'chk_change_work' || req === 'chk_alien_reg' || req === 'chk_change_residence') { 
                 const dom = document.getElementById('wrap_dorm'); 
                 if(dom) dom.classList.remove('hidden'); 
+            }
+            if (visa === 'E-7' && (req === 'chk_extension' || req === 'chk_change_status')) {
+                const dom = document.getElementById('wrap_guar_period');
+                if(dom) dom.classList.remove('hidden');
             }
             
             if (submitter === 'spouse') { 
@@ -1520,7 +1536,6 @@
                 
                 const stepNum = step === 'excel' ? 2 : parseInt(step);
                 
-                // 7개 스텝으로 업데이트
                 for (let i = 1; i <= 7; i++) {
                     const btn = document.getElementById(`stepper-btn-${i}`);
                     if (!btn) continue;
@@ -1694,21 +1709,21 @@
                 let borderClass = '';
                 
                 if (doc.type === 'auto') {
-                    badge = '<span class="text-[10px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">이 시스템 자동발급</span>';
+                    badge = `<span class="badge-auto text-[10px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_auto']}</span>`;
                     borderClass = 'border-blue-200 bg-blue-50/50';
                 } else if (doc.type === 'company') {
-                    badge = '<span class="text-[10px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">회사 발급</span>';
+                    badge = `<span class="badge-company text-[10px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_company']}</span>`;
                     borderClass = 'border-emerald-200 bg-emerald-50/30';
                 } else {
-                    badge = '<span class="text-[10px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">개인 준비(작성)</span>';
+                    badge = `<span class="badge-personal text-[10px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_personal']}</span>`;
                     borderClass = 'border-amber-200 bg-amber-50/30';
                 }
                 
                 html += `<div class="flex items-center justify-between p-3 rounded-xl border ${borderClass}">
-                    <span class="text-sm font-bold text-slate-700 pr-3 leading-snug cursor-pointer transition-colors duration-200 hover:text-blue-600 select-none flex-1" 
+                    <span class="text-sm font-bold text-slate-700 pr-3 leading-snug cursor-pointer transition-colors duration-200 hover:text-blue-600 select-none flex-1 doc-name-label" 
                           data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}" 
                           onclick="toggleDocTranslation(this)">
-                        ${doc.name.kr}
+                        ${doc.name[currentLang] || doc.name.kr}
                     </span>
                     <div class="shrink-0">${badge}</div>
                 </div>`;
@@ -2008,7 +2023,9 @@
                     { header: '연소득(만원)', key: 'income', width: 15 },
                     { header: '재입국신청기간', key: 'reentry', width: 15 },
                     { header: '환급은행', key: 'refund_bank', width: 15 },
-                    { header: '환급계좌번호', key: 'refund_acc', width: 25 }
+                    { header: '환급계좌번호', key: 'refund_acc', width: 25 },
+                    { header: '신원보증_시작일', key: 'guar_start', width: 20 },
+                    { header: '신원보증_종료일', key: 'guar_end', width: 20 }
                 ];
 
                 worksheet.getRow(1).eachCell((cell) => {
@@ -2023,13 +2040,15 @@
                     phone: '', addr_home: 'SON HA, THAI THUY', home_phone: '+84 00-000-0000', email: 'example@email.com', submitter: '본인', proxy_name: '', 
                     cname: '에이치디현대삼호 주식회사', cregno: '4118119799', rep_name: '김재을', rep_id: '', rep_gender: 'M', caddr: '전라남도 영암군 삼호읍 대불로 93', 
                     cphone: '0614602114', new_cname: '', new_cregno: '', new_cphone: '', dorm_own: '자가', dorm_type: '기숙사', dorm_start: '20240518', 
-                    job: '조선용접공', income: '3000', reentry: '', refund_bank: '', refund_acc: ''
+                    job: '조선용접공', income: '3000', reentry: '', refund_bank: '', refund_acc: '', guar_start: '20240518', guar_end: '20260517'
                 });
 
                 worksheet.getColumn('dob').numFmt = '0000"-"00"-"00';
                 worksheet.getColumn('pass_issue').numFmt = '0000"-"00"-"00';
                 worksheet.getColumn('pass_exp').numFmt = '0000"-"00"-"00';
                 worksheet.getColumn('dorm_start').numFmt = '0000"-"00"-"00';
+                worksheet.getColumn('guar_start').numFmt = '0000"-"00"-"00';
+                worksheet.getColumn('guar_end').numFmt = '0000"-"00"-"00';
                 worksheet.getColumn('arc').numFmt = '000000"-"0000000';
                 worksheet.getColumn('rep_id').numFmt = '000000"-"0000000';
                 worksheet.getColumn('cregno').numFmt = '000"-"00"-"00000';
@@ -2104,7 +2123,7 @@
                         if (strVal && !strVal.includes('-')) {
                             let onlyNum = strVal.replace(/[^0-9]/g, '');
                             
-                            if (header.includes('생년월일') || header.includes('발급일') || header.includes('만료일') || header.includes('시작일')) {
+                            if (header.includes('생년월일') || header.includes('발급일') || header.includes('만료일') || header.includes('시작일') || header.includes('종료일')) {
                                 if (onlyNum.length === 8) {
                                     strVal = onlyNum.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
                                 }
@@ -2206,7 +2225,9 @@
                             'i_income': row['연소득(만원)'],
                             'i_reentry_period': row['재입국신청기간'], 
                             'i_refund_bank': row['환급은행'], 
-                            'i_refund_acc': row['환급계좌번호']
+                            'i_refund_acc': row['환급계좌번호'],
+                            'i_guar_start': row['신원보증_시작일'],
+                            'i_guar_end': row['신원보증_종료일']
                         };
                         
                         if (map[id] !== undefined && map[id] !== null && map[id] !== '') return String(map[id]);
@@ -2416,7 +2437,8 @@
                     "i_rep_id": getVal('i_rep_id'), 
                     "i_cphone": getVal('i_cphone'), 
                     "i_caddr": getVal('i_caddr')
-                }
+                },
+                "신원보증 기간": getVal('i_guar_start') + " ~ " + getVal('i_guar_end')
             };
 
             const langNameMap = { 'kr': '한국어', 'en': 'English', 'vn': 'Tiếng Việt' };
@@ -2717,9 +2739,7 @@ ${JSON.stringify(formData, null, 2)}
                 drawBox('p_id', valFn('i_rep_id')); 
                 drawBox('p_nation', '대한민국'); 
                 
-                let pNameStr = valFn('i_cname');
-                if (valFn('i_rep_name')) pNameStr += `(${valFn('i_rep_name')})`;
-                drawBox('p_name', pNameStr); 
+                drawBox('p_name', valFn('i_rep_name')); 
                 
                 drawBox('p_phone', valFn('i_cphone'));
                 drawBox('rel_employer', 'check'); 
@@ -2769,7 +2789,12 @@ ${JSON.stringify(formData, null, 2)}
                 drawBox('p_phone', valFn('i_cphone')); 
                 drawBox('p_addr', valFn('i_caddr'));
                 drawBox('p_rel', '고용주'); 
-                drawBox('p_period', '2년 (최장 4년)'); 
+                
+                let gStart = valFn('i_guar_start') || '';
+                let gEnd = valFn('i_guar_end') || '';
+                let periodStr = (gStart && gEnd) ? `${gStart} ~ ${gEnd}` : '2년 (최장 4년)';
+                drawBox('p_period', periodStr); 
+                
                 drawBox('p_company', valFn('i_cname')); 
                 drawBox('p_job', '대표이사'); 
                 drawBox('p_caddr', valFn('i_caddr')); 
@@ -2871,11 +2896,11 @@ ${JSON.stringify(formData, null, 2)}
             docList.forEach((doc, idx) => {
                 let badge = '';
                 if (doc.type === 'auto') {
-                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">이 시스템 자동생성</span>`;
+                    badge = `<span class="badge-auto mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_auto']}</span>`;
                 } else if (doc.type === 'company') {
-                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">회사 발급</span>`;
+                    badge = `<span class="badge-company mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_company']}</span>`;
                 } else {
-                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">개인 준비(작성)</span>`;
+                    badge = `<span class="badge-personal mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">${i18nDict[currentLang]['badge_personal']}</span>`;
                 }
                 
                 const docName = doc.name[currentLang] || doc.name.kr;
@@ -2884,7 +2909,7 @@ ${JSON.stringify(formData, null, 2)}
                 <label class="flex flex-col sm:flex-row sm:items-center p-4 border border-slate-200 bg-white rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-400 has-[:checked]:ring-1 has-[:checked]:ring-emerald-400">
                     <div class="flex items-center w-full sm:w-auto">
                         <input type="checkbox" class="w-6 h-6 custom-radio mr-4 !accent-emerald-600 final-checklist-item" onchange="checkFinalSuccess()"> 
-                        <span class="font-bold text-slate-800 text-sm md:text-base flex-1">${docName}</span>
+                        <span class="doc-name-label font-bold text-slate-800 text-sm md:text-base flex-1" data-kr="${doc.name.kr}" data-en="${doc.name.en}" data-vn="${doc.name.vn}">${docName}</span>
                     </div>
                     <div class="ml-10 sm:ml-auto shrink-0">${badge}</div>
                 </label>`;
@@ -2892,7 +2917,7 @@ ${JSON.stringify(formData, null, 2)}
             html += '</div>';
             
             container.innerHTML = html;
-            checkFinalSuccess(); // 초기 상태 체크
+            checkFinalSuccess(); 
         }
         
         function checkFinalSuccess() {
