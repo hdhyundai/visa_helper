@@ -26,16 +26,28 @@
         body { 
             font-family: 'Pretendard', sans-serif; 
             background-color: #f1f5f9; 
+            word-break: keep-all; /* 단어 단위 줄바꿈 보장 */
+            overflow-wrap: break-word; /* 긴 텍스트 넘침 방지 */
         }
         
-        /* 스텝 컨테이너 애니메이션 */
+        /* 스텝 컨테이너 애니메이션 및 세로 중앙 정렬 완벽 대응 */
         .step-container { 
             display: none; 
             animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            width: 100%;
         }
         .step-container.active { 
-            display: block; 
+            display: flex; 
+            flex-direction: column;
+            flex: 1; /* 부모(main)의 높이를 꽉 채움 */
         }
+        /* 세로 길이가 짧은 컨텐츠도 화면 중앙에 오도록 위아래 여백 자동 할당 */
+        .step-container.active::before,
+        .step-container.active::after {
+            content: '';
+            flex: auto;
+        }
+        
         @keyframes fadeIn { 
             from { opacity: 0; transform: translateY(15px); } 
             to { opacity: 1; transform: translateY(0); } 
@@ -114,9 +126,9 @@
         .custom-radio { width: 1.25rem; height: 1.25rem; accent-color: #2563eb; cursor: pointer; }
     </style>
 </head>
-<body class="text-slate-800 md:p-6 lg:p-10">
+<body class="text-slate-800 flex flex-col justify-center items-center min-h-screen bg-[#f1f5f9] md:p-6 lg:p-10">
 
-    <div id="app-ui" class="max-w-3xl mx-auto bg-white min-h-screen md:min-h-[85vh] shadow-2xl relative flex flex-col md:rounded-3xl overflow-hidden ring-1 ring-slate-900/5">
+    <div id="app-ui" class="w-full max-w-3xl m-auto bg-white min-h-screen md:min-h-[85vh] shadow-2xl relative flex flex-col md:rounded-3xl overflow-hidden ring-1 ring-slate-900/5">
         
         <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 sticky top-0 z-10 flex justify-between items-center shadow-lg">
             <div class="flex items-center gap-2 md:gap-3">
@@ -166,10 +178,13 @@
                 <button onclick="navigateStep(6)" class="step-btn relative z-10 flex flex-col items-center gap-1 group" id="stepper-btn-6">
                     <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 bg-slate-100 text-slate-400 border-2 border-white ring-1 ring-slate-200 shadow-sm step-circle">6</div>
                 </button>
+                <button onclick="navigateStep(7)" class="step-btn relative z-10 flex flex-col items-center gap-1 group" id="stepper-btn-7">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 bg-slate-100 text-slate-400 border-2 border-white ring-1 ring-slate-200 shadow-sm step-circle">7</div>
+                </button>
             </div>
         </div>
 
-        <main class="p-5 md:p-8 flex-1 overflow-y-auto overflow-x-hidden relative">
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto overflow-x-hidden relative flex flex-col">
             
             <div id="step-0" class="step-container active relative">
                 <div class="flex flex-col items-center justify-center h-full min-h-[60vh] text-center pt-8 pb-10">
@@ -197,7 +212,7 @@
             </div>
 
             <div id="step-1" class="step-container">
-                <div class="mb-6">
+                <div class="mb-6 text-center">
                     <span class="text-blue-600 font-bold text-sm tracking-wider uppercase" data-i18n="s1_step">Step 1</span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s1_title">비자 및 민원 선택</h2>
                     <p class="text-sm text-slate-500 mt-2" data-i18n="s1_desc">선택하신 내용에 따라 필요한 입력 항목과 증빙 서류가 동적으로 변경됩니다.</p>
@@ -222,42 +237,42 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 auto-rows-fr">
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_alien_reg" class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-slate-700" data-i18n="req_1">외국인 등록</span>
+                            <span class="font-bold text-slate-700 block" data-i18n="req_1">외국인 등록</span>
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_alien_reg')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
-                        <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-blue-400 bg-blue-50 ring-1 ring-blue-400 h-full relative pr-12">
+                        <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-blue-400 bg-blue-50 ring-1 ring-blue-400 shadow-sm h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_extension" checked class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-blue-800" data-i18n="req_2">체류기간 연장허가</span>
+                            <span class="font-bold text-blue-800 block" data-i18n="req_2">체류기간 연장허가</span>
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_extension')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_change_work" class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-slate-700" data-i18n="req_3">근무처 변경/추가</span>
+                            <span class="font-bold text-slate-700 block" data-i18n="req_3">근무처 변경/추가</span>
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_change_work')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_reentry" class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-slate-700" data-i18n="req_4">재입국허가</span>
+                            <span class="font-bold text-slate-700 block" data-i18n="req_4">재입국허가</span>
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_reentry')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_reissue" class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-slate-700" data-i18n="req_5">등록증 재발급</span>
+                            <span class="font-bold text-slate-700 block" data-i18n="req_5">등록증 재발급</span>
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_reissue')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
                         </label>
                         <label class="flex items-center px-4 py-2 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12">
                             <input type="radio" name="reqType" value="chk_change_status" class="custom-radio mr-3" onchange="handleModeChange()"> 
-                            <span class="font-bold text-slate-700 whitespace-nowrap mr-3" data-i18n="req_6">체류자격 변경</span>
+                            <span class="font-bold text-slate-700 whitespace-nowrap mr-3 block" data-i18n="req_6">체류자격 변경</span>
                             <input type="text" id="val_change_status" class="input-field !py-2 !px-3 text-xs uppercase flex-1 min-w-0" placeholder="예: E-7-4" onclick="document.querySelector('input[value=\'chk_change_status\']').click();">
                             <button type="button" class="absolute right-4 p-2 text-slate-300 hover:text-blue-500 transition" onclick="showDocInfo(event, 'chk_change_status')" title="필요 서류 보기">
                                 <i class="fa-solid fa-circle-info text-lg"></i>
@@ -272,7 +287,7 @@
             </div>
 
             <div id="step-excel" class="step-container">
-                <div class="mb-6">
+                <div class="mb-6 text-center">
                     <span class="text-emerald-600 font-bold text-sm tracking-wider uppercase" data-i18n="s_excel_step">Step 2 (Batch)</span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s_excel_title">다수 인원 일괄 처리</h2>
                 </div>
@@ -303,7 +318,7 @@
             </div>
 
             <div id="step-2" class="step-container">
-                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="mb-6 flex flex-col items-center justify-center text-center gap-4">
                     <div>
                         <span class="text-blue-600 font-bold text-sm tracking-wider uppercase" data-i18n="s2_step">Step 2</span>
                         <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s2_title">외국인 인적사항</h2>
@@ -408,7 +423,7 @@
             </div>
 
             <div id="step-3" class="step-container">
-                <div class="mb-6">
+                <div class="mb-6 text-center">
                     <span class="text-blue-600 font-bold text-sm tracking-wider uppercase" data-i18n="s3_step">Step 3</span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s3_title">주소 및 연락처</h2>
                 </div>
@@ -456,7 +471,7 @@
             </div>
 
             <div id="step-4" class="step-container">
-                <div class="mb-6">
+                <div class="mb-6 text-center">
                     <span class="text-blue-600 font-bold text-sm tracking-wider uppercase" data-i18n="s4_step">Step 4</span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s4_title">근무처 및 거주 정보</h2>
                 </div>
@@ -593,7 +608,7 @@
             </div>
 
             <div id="step-5" class="step-container">
-                <div class="mb-6 flex items-center justify-between">
+                <div class="mb-6 flex flex-col items-center justify-center text-center">
                     <div>
                         <span class="text-indigo-500 font-bold text-sm tracking-wider uppercase" data-i18n="s5_step">Step 5</span>
                         <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s5_title">AI 서류 정밀 검증</h2>
@@ -611,7 +626,6 @@
                         </div>
                         <p class="text-sm text-indigo-200 mb-6" data-i18n="s5_desc">증빙서류를 여러 번 나누어 촬영/업로드하셔도 AI가 하나로 취합하여 정밀 대조합니다.</p>
                         
-                        <!-- 카메라 및 갤러리 명시적 버튼 -->
                         <div class="grid grid-cols-2 gap-3 mb-4">
                             <label class="flex flex-col items-center justify-center bg-white/10 hover:bg-white/20 border-2 border-indigo-400/50 border-dashed rounded-2xl py-6 cursor-pointer transition-all">
                                 <i class="fa-solid fa-camera text-3xl mb-2 text-indigo-300"></i>
@@ -656,9 +670,9 @@
             </div>
 
             <div id="step-6" class="step-container">
-                <div class="mb-6">
+                <div class="mb-6 flex flex-col items-center justify-center text-center">
                     <span class="text-emerald-600 font-bold text-sm tracking-wider uppercase" data-i18n="s6_step">Step 6</span>
-                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1 flex items-center"><i class="fa-solid fa-print text-emerald-500 mr-2"></i><span data-i18n="s6_title">최종 서류 생성</span></h2>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1 flex items-center justify-center"><i class="fa-solid fa-print text-emerald-500 mr-2"></i><span data-i18n="s6_title">최종 서류 생성</span></h2>
                     <p class="text-sm text-slate-500 mt-2" data-i18n="s6_desc">입력하신 정보 기반으로 완성된 서류를 확인하고 다운로드하세요.</p>
                 </div>
                     
@@ -680,20 +694,46 @@
                     </div>
                 </div>
                 
-                <div class="mt-8 flex gap-3">
-                    <button onclick="prevStep(5)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-4 rounded-xl transition text-base" data-i18n="btn_prev">이전</button>
-                    <button id="btn-generate-all" onclick="generateSelectedPDFs()" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base flex justify-center items-center">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> <span data-i18n="btn_generate">선택된 서류 일괄 생성</span>
-                    </button>
+                <div class="mt-8 flex flex-col gap-3">
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(5)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-4 rounded-xl transition text-base" data-i18n="btn_prev">이전</button>
+                        <button id="btn-generate-all" onclick="generateSelectedPDFs()" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base flex justify-center items-center">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> <span data-i18n="btn_generate">선택된 서류 일괄 생성</span>
+                        </button>
+                    </div>
+                    <!-- Step 7으로 넘어가는 버튼 추가 -->
+                    <button onclick="renderChecklist(); nextStep(7);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition text-base" data-i18n="btn_to_step7">다음 단계 (최종 제출 점검)</button>
                 </div>
                 
                 <div id="download-zone" class="hidden w-full flex flex-col gap-3 mt-6"></div>
             </div>
 
+            <div id="step-7" class="step-container">
+                <div class="mb-6 flex flex-col items-center justify-center text-center">
+                    <span class="text-rose-500 font-bold text-sm tracking-wider uppercase" data-i18n="s7_step">Step 7</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1" data-i18n="s7_title">최종 준비 서류 점검</h2>
+                    <p class="text-sm text-slate-500 mt-2" data-i18n="s7_desc">해당 민원에 필요한 모든 서류가 준비되었는지 확인해 주세요.</p>
+                </div>
+                
+                <div id="checklist-container" class="card-box bg-slate-50/50">
+                    <!-- 체크리스트 항목이 동적으로 생성됩니다 -->
+                </div>
+
+                <div id="final-success-msg" class="hidden bg-emerald-50 border-2 border-emerald-500 rounded-3xl p-6 md:p-8 text-center shadow-lg animate-pulse mb-6">
+                    <i class="fa-solid fa-circle-check text-5xl text-emerald-500 mb-4"></i>
+                    <h3 class="text-xl font-extrabold text-emerald-800 mb-2" data-i18n="s7_success_title">모든 서류 준비 완료!</h3>
+                    <p class="text-sm md:text-base text-emerald-600 font-bold" data-i18n="s7_success_desc">모든 서류가 꼼꼼하게 준비되었습니다.<br>관할 출입국·외국인관서에 방문하시거나 하이코리아(온라인)를 통해 신청을 완료해 주시기 바랍니다.</p>
+                </div>
+
+                <div class="mt-4 flex gap-3">
+                    <button onclick="prevStep(6)" class="w-1/3 bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 font-bold py-4 rounded-xl transition text-base" data-i18n="btn_prev">이전</button>
+                    <button onclick="goHome()" class="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition text-base" data-i18n="btn_home">처음으로 돌아가기</button>
+                </div>
+            </div>
+
         </main>
     </div>
 
-    
     <!-- 직원 DB 검색 모달 -->
     <div id="db-modal" class="modal z-[160]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-lg shadow-2xl flex flex-col max-h-[80vh]">
@@ -708,7 +748,7 @@
         </div>
     </div>
 
-    <!-- 엑셀 대량 처리 모달 (ExcelJS 유효성 검사 내장) -->
+    <!-- 엑셀 대량 처리 모달 -->
     <div id="excel-modal" class="modal z-[160]">
         <div class="bg-white p-6 rounded-3xl w-11/12 max-w-sm shadow-2xl text-center">
             <i class="fa-solid fa-file-excel text-5xl text-emerald-500 mb-4"></i>
@@ -827,7 +867,6 @@
             });
         });
 
-        // Exponential backoff를 위한 범용 API 호출 래퍼 (안정성 강화)
         async function fetchWithBackoff(url, payload) {
             const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < delays.length + 1; i++) {
@@ -847,7 +886,7 @@
         }
 
         // ---------------------------------------------------
-        // 1. 다국어 데이터 (i18n) 설정
+        // 1. 다국어 데이터 (i18n) 설정 (Step 7 번역 추가)
         // ---------------------------------------------------
         const i18nDict = {
             'kr': {
@@ -967,7 +1006,14 @@
                 'ai_msg_err_title': 'AI 통신 오류', 
                 'ai_msg_err_desc': '검증 서버 연결에 실패했습니다.\n서류 생성 단계는 정상 진행 가능합니다.', 
                 'btn_ai_recheck': '다시 대조하기', 
-                'ai_loading': '초정밀 교차 대조 분석 중...'
+                'ai_loading': '초정밀 교차 대조 분석 중...',
+                'btn_to_step7': '다음 단계 (최종 제출 점검)',
+                's7_step': 'Step 7', 
+                's7_title': '최종 준비 서류 점검', 
+                's7_desc': '해당 민원에 필요한 모든 서류가 준비되었는지 확인해 주세요.',
+                's7_success_title': '모든 서류 준비 완료!',
+                's7_success_desc': '모든 서류가 꼼꼼하게 준비되었습니다.<br>관할 출입국·외국인관서에 방문하시거나 하이코리아(온라인)를 통해 신청을 완료해 주시기 바랍니다.',
+                'btn_home': '처음으로 돌아가기'
             },
             'en': {
                 'header_title': 'HDH Samho VISA Support', 
@@ -1086,7 +1132,14 @@
                 'ai_msg_err_title': 'AI Communication Error', 
                 'ai_msg_err_desc': 'Failed to connect to the verification server.\nYou can still proceed to document generation.', 
                 'btn_ai_recheck': 'Re-verify', 
-                'ai_loading': 'Performing cross-check...'
+                'ai_loading': 'Performing cross-check...',
+                'btn_to_step7': 'Next Step (Final Checklist)',
+                's7_step': 'Step 7', 
+                's7_title': 'Final Document Checklist', 
+                's7_desc': 'Please confirm all required documents are ready.',
+                's7_success_title': 'All Documents Ready!',
+                's7_success_desc': 'All documents are perfectly prepared.<br>Please visit the immigration office or apply online via HiKorea.',
+                'btn_home': 'Go to Home'
             },
             'vn': {
                 'header_title': 'Hỗ trợ Visa HDH Samho', 
@@ -1205,13 +1258,17 @@
                 'ai_msg_err_title': 'Lỗi kết nối AI', 
                 'ai_msg_err_desc': 'Không thể kết nối với máy chủ xác minh.\nBạn vẫn có thể tiếp tục tạo tài liệu.', 
                 'btn_ai_recheck': 'Kiểm tra lại', 
-                'ai_loading': 'Đang phân tích đối chiếu...'
+                'ai_loading': 'Đang phân tích đối chiếu...',
+                'btn_to_step7': 'Tiếp theo (Kiểm tra cuối cùng)',
+                's7_step': 'Bước 7', 
+                's7_title': 'Danh sách tài liệu cuối cùng', 
+                's7_desc': 'Vui lòng xác nhận tất cả tài liệu đã sẵn sàng.',
+                's7_success_title': 'Tất cả tài liệu đã sẵn sàng!',
+                's7_success_desc': 'Tất cả tài liệu đã được chuẩn bị đầy đủ.<br>Vui lòng đến văn phòng xuất nhập cảnh hoặc nộp trực tuyến qua HiKorea.',
+                'btn_home': 'Về trang chủ'
             }
         };
 
-        // ---------------------------------------------------
-        // 2. 다국어 적용 함수
-        // ---------------------------------------------------
         function changeLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -1227,16 +1284,12 @@
                 document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_next_step'];
             }
             
-            // AI 검증 버튼 텍스트 수동 업데이트
             const aiBtn = document.getElementById('btn_verify_text');
             if (aiBtn) {
                 aiBtn.innerHTML = i18nDict[currentLang]['btn_verify'];
             }
         }
 
-        // ---------------------------------------------------
-        // 3. 프로세스 이동 로직
-        // ---------------------------------------------------
         function startSingleProcess() { 
             isBatchMode = false; 
             document.getElementById('btn-next-step1').innerHTML = i18nDict[currentLang]['btn_next_step']; 
@@ -1257,9 +1310,6 @@
             }
         }
 
-        // ---------------------------------------------------
-        // 4. 자동 저장 (Auto Save)
-        // ---------------------------------------------------
         let autoSaveTimer;
         document.addEventListener('input', (e) => { 
             if (e.target.type !== 'file') { 
@@ -1278,6 +1328,7 @@
             const data = {};
             document.querySelectorAll('input, select').forEach(el => {
                 if (el.type === 'file') return;
+                if (el.classList.contains('final-checklist-item')) return; // 체크리스트 제외
                 
                 if (el.type === 'radio' || el.type === 'checkbox') { 
                     if (el.name) {
@@ -1301,6 +1352,7 @@
                     const data = JSON.parse(saved);
                     document.querySelectorAll('input, select').forEach(el => {
                         if (el.type === 'file') return;
+                        if (el.classList.contains('final-checklist-item')) return;
                         
                         if (el.type === 'radio' || el.type === 'checkbox') { 
                             let key = el.name ? `${el.name}_${el.value}` : el.id; 
@@ -1313,28 +1365,22 @@
             } catch(e) {}
         }
 
-        // DOM 로드 완료 시
         window.addEventListener('DOMContentLoaded', () => { 
             loadFormData(); 
             updateTemplateStatusUI(); 
             handleModeChange(); 
         });
 
-        // ---------------------------------------------------
-        // 5. 조건에 따른 동적 UI 변경
-        // ---------------------------------------------------
         function handleModeChange() {
             const req = document.querySelector('input[name="reqType"]:checked')?.value;
             const submitter = document.querySelector('input[name="submitter"]:checked')?.value || 'self';
             
-            // 라디오 버튼 스타일 초기화
             document.querySelectorAll('input[name="reqType"]').forEach(el => {
                 const lbl = el.closest('label');
                 lbl.className = 'flex items-center p-4 border rounded-xl cursor-pointer transition border-slate-200 bg-white h-full relative pr-12';
                 lbl.querySelector('span:first-of-type, div>span').className = 'font-bold text-slate-700 block';
             });
             
-            // 활성화된 라디오 버튼 스타일 강조
             const activeReq = document.querySelector('input[name="reqType"]:checked');
             if (activeReq) {
                 const activeLbl = activeReq.closest('label');
@@ -1342,13 +1388,11 @@
                 activeLbl.querySelector('span:first-of-type, div>span').className = 'font-bold text-blue-800 block';
             }
 
-            // 모든 가변 요소 숨김
             ['wrap_new_workplace', 'wrap_reentry_period', 'wrap_refund_acc', 'wrap_dorm', 'wrap_family_proxy', 'wrap_spouse', 'wrap_parents'].forEach(id => {
                 const dom = document.getElementById(id); 
                 if(dom) dom.classList.add('hidden');
             });
 
-            // 조건에 따라 요소 표시
             if (req === 'chk_change_work' || req === 'chk_change_status') { 
                 const dom = document.getElementById('wrap_new_workplace'); 
                 if(dom) dom.classList.remove('hidden'); 
@@ -1377,9 +1421,6 @@
             autoSuggestDocs();
         }
 
-        // ---------------------------------------------------
-        // 6. 공통 모달창 로직
-        // ---------------------------------------------------
         let confirmAction = null;
         function showConfirm(title, desc, actionFn) { 
             document.getElementById('confirm-title').innerText = title; 
@@ -1444,7 +1485,8 @@
                 
                 const stepNum = step === 'excel' ? 2 : parseInt(step);
                 
-                for (let i = 1; i <= 6; i++) {
+                // 7개 스텝으로 업데이트
+                for (let i = 1; i <= 7; i++) {
                     const btn = document.getElementById(`stepper-btn-${i}`);
                     if (!btn) continue;
                     const circle = btn.querySelector('.step-circle');
@@ -1463,13 +1505,13 @@
                 const line = document.getElementById('stepper-progress-line');
                 if (isBatchMode) {
                     if (line) line.style.width = stepNum === 1 ? '0%' : '100%';
-                    for (let i = 3; i <= 6; i++) {
+                    for (let i = 3; i <= 7; i++) {
                         const btn = document.getElementById(`stepper-btn-${i}`);
                         if(btn) btn.classList.add('hidden');
                     }
                 } else {
-                    if (line) line.style.width = `${((stepNum - 1) / 5) * 100}%`;
-                    for (let i = 3; i <= 6; i++) {
+                    if (line) line.style.width = `${((stepNum - 1) / 6) * 100}%`;
+                    for (let i = 3; i <= 7; i++) {
                         const btn = document.getElementById(`stepper-btn-${i}`);
                         if(btn) btn.classList.remove('hidden');
                     }
@@ -1513,78 +1555,78 @@
         const docMatrix = {
             'E-9': {
                 'chk_alien_reg': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 원본', en: 'Original Passport', vn: 'Hộ chiếu gốc' }, type: 'personal' },
                     { name: { kr: '표준규격사진 1매', en: '1 Standard Photo', vn: '1 Ảnh tiêu chuẩn' }, type: 'personal' },
-                    { name: { kr: '사업자 등록증', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' },
+                    { name: { kr: '사업자 등록증 사본', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' },
                     { name: { kr: '고용허가서 사본', en: 'Copy of Employment Permit', vn: 'Bản sao Giấy phép LĐ' }, type: 'company' },
                     { name: { kr: '표준근로계약서 사본', en: 'Copy of Standard Labor Contract', vn: 'Bản sao Hợp đồng LĐ' }, type: 'company' },
-                    { name: { kr: '체류지 입증서류', en: 'Proof of Residence', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
+                    { name: { kr: '거주/숙소제공 확인서 (이 시스템)', en: 'Proof of Residence Form', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
                     { name: { kr: '마약검사확인서', en: 'Drug Test Certificate', vn: 'Giấy khám ma túy' }, type: 'personal' }
                 ],
                 'chk_extension': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권', en: 'Passport', vn: 'Hộ chiếu' }, type: 'personal' },
                     { name: { kr: '외국인 등록증', en: 'Alien Registration Card (ARC)', vn: 'Thẻ cư trú (ARC)' }, type: 'personal' },
-                    { name: { kr: '체류지 입증서류', en: 'Proof of Residence', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
+                    { name: { kr: '거주/숙소제공 확인서 (이 시스템)', en: 'Proof of Residence Form', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
                     { name: { kr: '고용허가서 사본', en: 'Copy of Employment Permit', vn: 'Bản sao Giấy phép LĐ' }, type: 'company' },
                     { name: { kr: '표준근로계약서 사본', en: 'Copy of Standard Labor Contract', vn: 'Bản sao Hợp đồng LĐ' }, type: 'company' },
-                    { name: { kr: '사업자 등록증', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' }
+                    { name: { kr: '사업자 등록증 사본', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' }
                 ],
                 'chk_change_work': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권', en: 'Passport', vn: 'Hộ chiếu' }, type: 'personal' },
                     { name: { kr: '외국인 등록증', en: 'Alien Registration Card (ARC)', vn: 'Thẻ cư trú (ARC)' }, type: 'personal' },
-                    { name: { kr: '체류지 입증서류', en: 'Proof of Residence', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
+                    { name: { kr: '거주/숙소제공 확인서 (이 시스템)', en: 'Proof of Residence Form', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
                     { name: { kr: '고용허가서 사본', en: 'Copy of Employment Permit', vn: 'Bản sao Giấy phép LĐ' }, type: 'company' },
                     { name: { kr: '표준근로계약서 사본', en: 'Copy of Standard Labor Contract', vn: 'Bản sao Hợp đồng LĐ' }, type: 'company' },
-                    { name: { kr: '사업자 등록증', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' }
+                    { name: { kr: '사업자 등록증 사본', en: 'Business Registration Certificate', vn: 'Giấy phép kinh doanh' }, type: 'company' }
                 ],
                 'chk_reentry': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권', en: 'Passport', vn: 'Hộ chiếu' }, type: 'personal' },
                     { name: { kr: '외국인등록증', en: 'Alien Registration Card (ARC)', vn: 'Thẻ cư trú (ARC)' }, type: 'personal' }
                 ],
                 'default': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 및 외국인 등록증', en: 'Passport & ARC', vn: 'Hộ chiếu & Thẻ cư trú' }, type: 'personal' }
                 ]
             },
             'E-7': {
                 'chk_extension': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 및 외국인 등록증', en: 'Passport & ARC', vn: 'Hộ chiếu & Thẻ cư trú' }, type: 'personal' },
                     { name: { kr: '고용계약서', en: 'Employment Contract', vn: 'Hợp đồng lao động' }, type: 'company' },
                     { name: { kr: '개인 소득금액 증명', en: 'Proof of Personal Income', vn: 'Chứng minh thu nhập cá nhân' }, type: 'personal' },
                     { name: { kr: '사업장 등록증 사본', en: 'Business/Corporate Registration', vn: 'Giấy phép KD' }, type: 'company' },
-                    { name: { kr: '신원보증서 원본', en: 'Original Guarantee Form', vn: 'Bản gốc Giấy bảo lãnh' }, type: 'auto' },
-                    { name: { kr: '체류지 입증서류', en: 'Proof of Residence', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
-                    { name: { kr: '고용주 납부내역증명', en: 'Employer Tax Certificates', vn: 'Chứng nhận nộp thuế' }, type: 'company' }
+                    { name: { kr: '신원보증서 (이 시스템)', en: 'Original Guarantee Form', vn: 'Bản gốc Giấy bảo lãnh' }, type: 'auto' },
+                    { name: { kr: '거주/숙소제공 확인서 (이 시스템)', en: 'Proof of Residence Form', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' },
+                    { name: { kr: '고용주 납세증명서 등', en: 'Employer Tax Certificates', vn: 'Chứng nhận nộp thuế' }, type: 'company' }
                 ],
                 'chk_change_work': [
-                    { name: { kr: '통합신청서', en: 'Integrated Application Form', vn: 'Đơn xin tổng hợp' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Integrated Application Form', vn: 'Đơn xin tổng hợp' }, type: 'auto' },
                     { name: { kr: '여권 및 외국인 등록증', en: 'Passport & ARC', vn: 'Hộ chiếu & Thẻ cư trú' }, type: 'personal' },
                     { name: { kr: '고용추천서', en: 'Employment Recommendation', vn: 'Thư giới thiệu việc làm' }, type: 'company' },
                     { name: { kr: '고용계약서', en: 'Employment Contract', vn: 'Hợp đồng lao động' }, type: 'company' },
                     { name: { kr: '사업자등록증', en: 'Business Registration', vn: 'Giấy phép kinh doanh' }, type: 'company' }
                 ],
                 'chk_reentry': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 원본', en: 'Original Passport', vn: 'Hộ chiếu gốc' }, type: 'personal' },
                     { name: { kr: '외국인 등록증', en: 'Alien Registration Card (ARC)', vn: 'Thẻ cư trú (ARC)' }, type: 'personal' },
                     { name: { kr: '수수료', en: 'Processing Fee', vn: 'Lệ phí' }, type: 'personal' }
                 ],
                 'chk_change_status': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 및 외국인 등록증', en: 'Passport & ARC', vn: 'Hộ chiếu & Thẻ cư trú' }, type: 'personal' },
                     { name: { kr: '고용계약서 및 사업자등록증', en: 'Contract & Business Registration', vn: 'Hợp đồng LĐ & GPKD' }, type: 'company' },
                     { name: { kr: '개인 소득금액 증명', en: 'Proof of Personal Income', vn: 'Chứng minh thu nhập cá nhân' }, type: 'personal' },
                     { name: { kr: '자격 요건 입증 서류', en: 'Proof of Qualifications', vn: 'Giấy tờ chứng minh trình độ' }, type: 'personal' },
-                    { name: { kr: '신원보증서 원본', en: 'Original Guarantee Form', vn: 'Bản gốc Giấy bảo lãnh' }, type: 'auto' },
-                    { name: { kr: '체류지 입증서류', en: 'Proof of Residence', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' }
+                    { name: { kr: '신원보증서 (이 시스템)', en: 'Original Guarantee Form', vn: 'Bản gốc Giấy bảo lãnh' }, type: 'auto' },
+                    { name: { kr: '거주/숙소제공 확인서 (이 시스템)', en: 'Proof of Residence Form', vn: 'Giấy chứng minh nơi ở' }, type: 'auto' }
                 ],
                 'default': [
-                    { name: { kr: '신청서', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
+                    { name: { kr: '통합신청서 (이 시스템)', en: 'Application Form', vn: 'Đơn đăng ký' }, type: 'auto' },
                     { name: { kr: '여권 및 외국인 등록증', en: 'Passport & ARC', vn: 'Hộ chiếu & Thẻ cư trú' }, type: 'personal' }
                 ]
             }
@@ -1670,9 +1712,6 @@
             document.getElementById('doc-info-modal').classList.remove('active');
         }
 
-        // ---------------------------------------------------
-        // 7. 빈 PDF 양식 로컬 등록 로직
-        // ---------------------------------------------------
         function uploadSpecificTemplate(docType, inputEl) {
             if (inputEl.files.length === 0) return;
             const reader = new FileReader();
@@ -1724,9 +1763,6 @@
             return bytes.buffer;
         }
 
-        // ---------------------------------------------------
-        // 8. 직원 DB 명부 관리 로직
-        // ---------------------------------------------------
         function openDBModal() { 
             document.getElementById('db-modal').classList.add('active'); 
             renderDBList(); 
@@ -1831,9 +1867,6 @@
             });
         }
 
-        // ---------------------------------------------------
-        // 9. 신분증 단일 OCR 기능
-        // ---------------------------------------------------
         async function runIDOCR(inputEl) {
             if (inputEl.files.length === 0) return;
             const file = inputEl.files[0];
@@ -1870,7 +1903,6 @@
 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
                 
-                // Exponential Backoff가 적용된 fetchWithBackoff 함수 사용
                 const result = await fetchWithBackoff(apiUrl, payload);
                 
                 if (result.error) throw new Error(result.error.message);
@@ -1901,9 +1933,6 @@
             }
         }
 
-        // ---------------------------------------------------
-        // 10. 엑셀 대량 처리 (ExcelJS 활용)
-        // ---------------------------------------------------
         async function downloadExcelTemplate() {
             try {
                 const workbook = new ExcelJS.Workbook();
@@ -2188,9 +2217,6 @@
             }
         }
 
-        // ---------------------------------------------------
-        // 11. 폼 자동 포맷터 (입력 이벤트 처리)
-        // ---------------------------------------------------
         document.addEventListener('input', function(e) {
             const target = e.target;
             
@@ -2318,9 +2344,6 @@
             document.getElementById('file-preview-container').innerHTML = '';
         }
 
-        // ---------------------------------------------------
-        // 12. AI 서류 검증 로직
-        // ---------------------------------------------------
         async function runAIVerification() {
             const validDocs = uploadedImagesBase64.filter(doc => doc !== null);
             if (validDocs.length === 0) {
@@ -2422,7 +2445,6 @@ ${JSON.stringify(formData, null, 2)}
 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
                 
-                // Exponential Backoff가 적용된 fetchWithBackoff 함수 사용
                 const result = await fetchWithBackoff(apiUrl, payload);
                 if (result.error) throw new Error(result.error.message);
                 
@@ -2479,129 +2501,6 @@ ${JSON.stringify(formData, null, 2)}
             autoSuggestDocs(); 
             nextStep(6); 
         }
-
-        const PDF_COORDS_MAIN = {
-            chk_alien_reg: { type: 'check', x: 69, y: 696 }, 
-            chk_reissue: { type: 'check', x: 67, y: 663 }, 
-            chk_extension: { type: 'check', x: 68, y: 639 }, 
-            chk_change_status: { type: 'check', x: 68, y: 616 },
-            val_change_status: { type: 'text', x: 187, y: 611, w: 23, h: 9 }, 
-            chk_grant_status: { type: 'check', x: 68, y: 580 }, 
-            chk_extra_act: { type: 'check', x: 226, y: 697 }, 
-            chk_change_work: { type: 'check', x: 228, y: 663 },
-            chk_reentry: { type: 'check', x: 226, y: 639 }, 
-            chk_change_residence: { type: 'check', x: 226, y: 616 },
-            surname: { type: 'text', x: 128, y: 524, w: 137, h: 11 }, 
-            givenname: { type: 'text', x: 269, y: 524, w: 159, h: 11 },
-            dob_yyyy: { type: 'text', x: 147, y: 496, w: 80, h: 13 }, 
-            dob_mm: { type: 'text', x: 228, y: 498, w: 38, h: 11 }, 
-            dob_dd: { type: 'text', x: 268, y: 498, w: 39, h: 11 }, 
-            gender_m: { type: 'check', x: 370, y: 516 }, 
-            gender_f: { type: 'check', x: 369, y: 505 }, 
-            nation: { type: 'text', x: 482, y: 476, w: 56, h: 46 },
-            arc_1: { type: 'text', x: 187, y: 476, w: 19, h: 20 }, 
-            arc_2: { type: 'text', x: 207, y: 476, w: 20, h: 20 }, 
-            arc_3: { type: 'text', x: 228, y: 476, w: 19, h: 20 }, 
-            arc_4: { type: 'text', x: 249, y: 476, w: 17, h: 20 }, 
-            arc_5: { type: 'text', x: 269, y: 476, w: 19, h: 20 }, 
-            arc_6: { type: 'text', x: 289, y: 476, w: 18, h: 20 }, 
-            arc_7: { type: 'text', x: 308, y: 476, w: 17, h: 20 }, 
-            arc_8: { type: 'text', x: 325, y: 476, w: 19, h: 20 }, 
-            arc_9: { type: 'text', x: 343, y: 476, w: 16, h: 20 }, 
-            arc_10: { type: 'text', x: 362, y: 476, w: 16, h: 20 }, 
-            arc_11: { type: 'text', x: 378, y: 476, w: 17, h: 20 }, 
-            arc_12: { type: 'text', x: 397, y: 476, w: 16, h: 20 }, 
-            arc_13: { type: 'text', x: 414, y: 476, w: 16, h: 20 },
-            passport: { type: 'text', x: 127, y: 454, w: 101, h: 21 }, 
-            pass_issue: { type: 'text', x: 308, y: 454, w: 87, h: 21 }, 
-            pass_exp: { type: 'text', x: 480, y: 455, w: 59, h: 21 },
-            address_kr: { type: 'text', x: 127, y: 434, w: 412, h: 20 }, 
-            phone: { type: 'text', x: 184, y: 419, w: 113, h: 13 }, 
-            cellphone: { type: 'text', x: 417, y: 420, w: 121, h: 13 },
-            address_home: { type: 'text', x: 185, y: 399, w: 231, h: 21 }, 
-            home_phone: { type: 'text', x: 483, y: 398, w: 55, h: 21 },
-            cname: { type: 'text', x: 208, y: 335, w: 53, h: 20 }, 
-            cregno: { type: 'text', x: 355, y: 335, w: 59, h: 20 }, 
-            cphone: { type: 'text', x: 482, y: 334, w: 57, h: 21 },
-            new_cname: { type: 'text', x: 207, y: 313, w: 53, h: 21 }, 
-            new_cregno: { type: 'text', x: 356, y: 313, w: 59, h: 20 }, 
-            new_cphone: { type: 'text', x: 482, y: 313, w: 56, h: 21 },
-            job: { type: 'text', x: 483, y: 299, w: 55, h: 15 }, 
-            income: { type: 'text', x: 207, y: 299, w: 47, h: 14 }, 
-            reentry_period: { type: 'text', x: 208, y: 287, w: 53, h: 13 }, 
-            email: { type: 'text', x: 355, y: 286, w: 163, h: 13 }, 
-            refund_acc: { type: 'text', x: 356, y: 266, w: 183, h: 19 },
-            app_date: { type: 'text', x: 208, y: 252, w: 87, h: 13 }, 
-            sign_main: { type: 'text', x: 436, y: 252, w: 101, h: 13 }, 
-            sign_sub_1: { type: 'text', x: 99, y: 130, w: 64, h: 22 }, 
-            sign_sub_2: { type: 'text', x: 274, y: 130, w: 57, h: 19 }, 
-            sign_sub_3: { type: 'text', x: 449, y: 130, w: 40, h: 18 }
-        };
-
-        const PDF_COORDS_RESIDENCE = {
-            f_nation: { type: 'text', x: 167, y: 683, w: 84, h: 45 }, 
-            f_arc: { type: 'text', x: 388, y: 683, w: 142, h: 45 },
-            f_name: { type: 'text', x: 168, y: 656, w: 194, h: 25 }, 
-            f_phone: { type: 'text', x: 429, y: 654, w: 103, h: 26 }, 
-            f_addr: { type: 'text', x: 168, y: 629, w: 362, h: 25 },
-            p_nation: { type: 'text', x: 167, y: 554, w: 73, h: 38 }, 
-            p_id: { type: 'text', x: 378, y: 554, w: 153, h: 39 }, 
-            p_name: { type: 'text', x: 168, y: 525, w: 207, h: 25 }, 
-            p_phone: { type: 'text', x: 429, y: 525, w: 99, h: 25 },
-            rel_family: { type: 'check', x: 182, y: 503 }, 
-            rel_employer: { type: 'check', x: 271, y: 502 }, 
-            rel_other: { type: 'check', x: 366, y: 502 }, 
-            rel_other_desc: { type: 'text', x: 428, y: 509, w: 96, h: 13 },
-            own_self: { type: 'check', x: 181, y: 468 }, 
-            own_rent: { type: 'check', x: 273, y: 470 }, 
-            own_other: { type: 'check', x: 380, y: 469 }, 
-            own_other_desc: { type: 'text', x: 440, y: 468, w: 83, h: 14 },
-            type_private: { type: 'check', x: 181, y: 441 }, 
-            type_dorm: { type: 'check', x: 325, y: 441 }, 
-            type_hotel: { type: 'check', x: 182, y: 413 }, 
-            type_other: { type: 'check', x: 326, y: 412 }, 
-            type_other_desc: { type: 'text', x: 388, y: 406, w: 131, h: 17 },
-            start_y: { type: 'text', x: 169, y: 374, w: 45, h: 19 }, 
-            start_m: { type: 'text', x: 254, y: 374, w: 37, h: 18 }, 
-            start_d: { type: 'text', x: 342, y: 373, w: 36, h: 21 },
-            sign_y: { type: 'text', x: 150, y: 313, w: 61, h: 17 }, 
-            sign_m: { type: 'text', x: 250, y: 314, w: 23, h: 16 }, 
-            sign_d: { type: 'text', x: 316, y: 314, w: 21, h: 14 },
-            p_sign_name: { type: 'text', x: 261, y: 290, w: 69, h: 17 }, 
-            p_company: { type: 'text', x: 263, y: 275, w: 68, h: 15 }
-        };
-
-        const PDF_COORDS_GUARANTEE = {
-            f_surname: { type: 'text', x: 131, y: 672, w: 127, h: 30 }, 
-            f_givenname: { type: 'text', x: 274, y: 672, w: 134, h: 29 }, 
-            f_hanja: { type: 'text', x: 434, y: 672, w: 97, h: 29 },
-            f_dob: { type: 'text', x: 163, y: 640, w: 245, h: 29 }, 
-            f_sex_m: { type: 'check', x: 465, y: 654 }, 
-            f_sex_f: { type: 'check', x: 507, y: 654 },
-            f_nation: { type: 'text', x: 149, y: 607, w: 258, h: 31 }, 
-            f_pass: { type: 'text', x: 450, y: 607, w: 81, h: 31 },
-            f_addr: { type: 'text', x: 181, y: 576, w: 226, h: 30 }, 
-            f_phone: { type: 'text', x: 451, y: 577, w: 80, h: 28 }, 
-            f_purpose: { type: 'text', x: 166, y: 546, w: 362, h: 27 },
-            p_name: { type: 'text', x: 145, y: 474, w: 260, h: 27 }, 
-            p_hanja: { type: 'text', x: 434, y: 473, w: 97, h: 28 }, 
-            p_nation: { type: 'text', x: 147, y: 444, w: 258, h: 25 },
-            p_sex_m: { type: 'check', x: 466, y: 457 }, 
-            p_sex_f: { type: 'check', x: 508, y: 456 },
-            p_dob: { type: 'text', x: 220, y: 413, w: 186, h: 29 }, 
-            p_phone: { type: 'text', x: 450, y: 414, w: 79, h: 27 }, 
-            p_addr: { type: 'text', x: 143, y: 381, w: 385, h: 30 },
-            p_rel: { type: 'text', x: 199, y: 352, w: 330, h: 29 }, 
-            p_company: { type: 'text', x: 153, y: 320, w: 253, h: 29 }, 
-            p_job: { type: 'text', x: 436, y: 321, w: 93, h: 27 },
-            p_caddr: { type: 'text', x: 178, y: 290, w: 228, h: 27 }, 
-            p_note: { type: 'text', x: 437, y: 290, w: 93, h: 27 }, 
-            p_period: { type: 'text', x: 338, y: 260, w: 189, h: 25 }, 
-            sign_y: { type: 'text', x: 355, y: 96, w: 60, h: 13 }, 
-            sign_m: { type: 'text', x: 429, y: 98, w: 34, h: 12 }, 
-            sign_d: { type: 'text', x: 480, y: 97, w: 31, h: 13 }, 
-            p_sign_name: { type: 'text', x: 356, y: 66, w: 124, h: 20 }
-        };
 
         async function createSingleDoc(docType, fontBuffer, valFn, PDFDocument, rgb) {
             const tplB64 = localStorage.getItem(`visaPdfTemplate_${docType}`);
@@ -2920,6 +2819,56 @@ ${JSON.stringify(formData, null, 2)}
             } finally { 
                 btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2 text-yellow-300"></i> ${i18nDict[currentLang]['btn_generate']}`; 
                 btn.disabled = false; 
+            }
+        }
+
+        // ---------------------------------------------------
+        // 13. 최종 점검 체크리스트 (Step 7)
+        // ---------------------------------------------------
+        function renderChecklist() {
+            const visa = document.querySelector('input[name="visaType"]:checked').value;
+            const reqType = document.querySelector('input[name="reqType"]:checked').value;
+            const docList = docMatrix[visa]?.[reqType] || docMatrix[visa]?.['default'];
+            
+            const container = document.getElementById('checklist-container');
+            let html = '<div class="space-y-3">';
+            
+            docList.forEach((doc, idx) => {
+                let badge = '';
+                if (doc.type === 'auto') {
+                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">이 시스템 자동생성</span>`;
+                } else if (doc.type === 'company') {
+                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">회사 발급</span>`;
+                } else {
+                    badge = `<span class="mt-2 sm:mt-0 sm:ml-3 text-[11px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold whitespace-nowrap shadow-sm">개인 준비(작성)</span>`;
+                }
+                
+                const docName = doc.name[currentLang] || doc.name.kr;
+                
+                html += `
+                <label class="flex flex-col sm:flex-row sm:items-center p-4 border border-slate-200 bg-white rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-400 has-[:checked]:ring-1 has-[:checked]:ring-emerald-400">
+                    <div class="flex items-center w-full sm:w-auto">
+                        <input type="checkbox" class="w-6 h-6 custom-radio mr-4 !accent-emerald-600 final-checklist-item" onchange="checkFinalSuccess()"> 
+                        <span class="font-bold text-slate-800 text-sm md:text-base flex-1">${docName}</span>
+                    </div>
+                    <div class="ml-10 sm:ml-auto shrink-0">${badge}</div>
+                </label>`;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+            checkFinalSuccess(); // 초기 상태 체크
+        }
+        
+        function checkFinalSuccess() {
+            const checkboxes = document.querySelectorAll('.final-checklist-item');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            const msgBox = document.getElementById('final-success-msg');
+            
+            if (checkboxes.length > 0 && allChecked) {
+                msgBox.classList.remove('hidden');
+            } else {
+                msgBox.classList.add('hidden');
             }
         }
     </script>
